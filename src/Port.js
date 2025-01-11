@@ -630,7 +630,7 @@ function DeveloperLife() {
               {/* Resume Button */}
               <div className="pt-4 sm:pt-6 flex">
                 <a
-                  href="/SANGAMESH_RESUME_UPDATED.pdf"
+                  href="/SANGAMESH_RESUME_UPDATED_1.pdf"
                   target="_blank"
                   className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition-all duration-300 hover:scale-105"
                 >
