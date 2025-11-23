@@ -2,111 +2,280 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sangamesh Resume</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Tailwind CSS -->
+  <title>Sangamesh Lingshetty - Resume</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide.min.js/296"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-50">
 
-  <div class="max-w-4xl mx-auto bg-white shadow-lg p-10 my-10">
-
+  <div class="max-w-4xl mx-auto p-8 bg-white text-gray-900 shadow-lg my-8">
+    
     <!-- Header -->
-    <h1 class="text-4xl font-bold mb-2">SANGAMESH LINGSHETTY</h1>
-    <p class="text-lg text-blue-600 font-semibold mb-4">
-      Backend Engineer | Full Stack Developer | AWS Solutions Architect
-    </p>
+    <header class="border-b-4 border-blue-600 pb-6 mb-6">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">SANGAMESH LINGSHETTY</h1>
+      <p class="text-xl text-blue-600 font-semibold mb-4">Backend Engineer | Full Stack Developer | AWS Solutions Architect</p>
+      
+      <div class="flex flex-wrap gap-4 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">✉</span>
+          <a href="mailto:sangameshlingshetty@gmail.com" class="hover:text-blue-600">sangameshlingshetty@gmail.com</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">📞</span>
+          <span>+91 7619587629</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">📍</span>
+          <span>Bengaluru, Karnataka</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">in</span>
+          <a href="#" class="hover:text-blue-600">LinkedIn</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">⚙</span>
+          <a href="#" class="hover:text-blue-600">GitHub</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-600">🌐</span>
+          <a href="#" class="hover:text-blue-600">Portfolio</a>
+        </div>
+      </div>
+    </header>
 
-    <div class="text-sm space-y-1">
-      <p><strong>Email:</strong> sangameshlingshetty@gmail.com</p>
-      <p><strong>Phone:</strong> +91 7619587629</p>
-      <p><strong>Location:</strong> Bengaluru, Karnataka</p>
-      <p><strong>LinkedIn:</strong> (add link)</p>
-      <p><strong>GitHub:</strong> (add link)</p>
-      <p><strong>Portfolio:</strong> (add link)</p>
-    </div>
+    <!-- Professional Summary -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">
+        💻 PROFESSIONAL SUMMARY
+      </h2>
+      <p class="text-gray-700 leading-relaxed">
+        Results-driven Backend Engineer with expertise in building scalable, production-grade systems using Node.js, AWS, and modern microservices architecture. Specialized in multi-tenant SaaS platforms, serverless computing, and real-time data processing. Proven track record of architecting end-to-end solutions that handle high-throughput workloads while maintaining 99.9% uptime. Passionate about solving complex technical challenges and delivering impactful backend systems that drive business value.
+      </p>
+    </section>
 
-    <hr class="my-6">
+    <!-- Technical Skills -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">TECHNICAL EXPERTISE</h2>
+      <div class="space-y-3">
+        <div>
+          <span class="font-semibold text-gray-900">Backend & APIs:</span>
+          <span class="text-gray-700"> Node.js, Express.js, RESTful APIs, GraphQL, Microservices, Serverless Architecture, WebSockets</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-900">Frontend Technologies:</span>
+          <span class="text-gray-700"> React.js, Next.js, TypeScript, Tailwind CSS, Bootstrap, Responsive Design</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-900">Cloud & DevOps:</span>
+          <span class="text-gray-700"> AWS (Lambda, API Gateway, DynamoDB, S3, CloudFront, SQS, SNS, CloudWatch, Cognito, RDS), Docker, CI/CD (GitHub Actions), Terraform, Infrastructure as Code</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-900">Databases:</span>
+          <span class="text-gray-700"> MongoDB, PostgreSQL, MySQL, DynamoDB, Redis (Caching & Session Management)</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-900">Authentication & Security:</span>
+          <span class="text-gray-700"> JWT, OAuth 2.0, Role-Based Access Control (RBAC), Multi-Factor Authentication</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-900">Other:</span>
+          <span class="text-gray-700"> Git, GitHub, Firebase, Payment Integration (Razorpay, Stripe), Testing (Jest, Supertest), Python, Java, Machine Learning Basics</span>
+        </div>
+      </div>
+    </section>
 
-    <!-- Summary -->
-    <h2 class="text-2xl font-bold mb-2">Professional Summary</h2>
-    <p class="text-gray-700 leading-relaxed">
-      Results-driven Backend Engineer specializing in scalable systems, microservices, and AWS serverless architecture.
-      Experience building multi-tenant SaaS, high-throughput pipelines, and real-time applications with 99.9% uptime.
-    </p>
+    <!-- Professional Experience -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">
+        💼 PROFESSIONAL EXPERIENCE
+      </h2>
 
-    <hr class="my-6">
+      <!-- Current Role -->
+      <div class="mb-5 border-l-4 border-blue-600 pl-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900">Backend Engineer</h3>
+            <p class="text-blue-600 font-semibold">Aquera Technologies | Bengaluru, India</p>
+          </div>
+          <span class="text-gray-600 font-semibold">Feb 2025 – Present</span>
+        </div>
+        <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+          <li>Architecting and implementing scalable microservices using Node.js, Express.js, and AWS serverless stack (Lambda, API Gateway, DynamoDB) to support enterprise-grade multi-tenant SaaS platform serving 50+ organizations</li>
+          <li>Designing and deploying event-driven architecture using AWS SQS/SNS for asynchronous processing, reducing API response latency by 45% and improving system throughput to handle 10K+ requests per minute</li>
+          <li>Building robust CI/CD pipelines with GitHub Actions and Docker, automating deployment workflows and reducing deployment time from 2 hours to 15 minutes while maintaining zero-downtime releases</li>
+          <li>Implementing comprehensive monitoring and observability using AWS CloudWatch and X-Ray, achieving 99.9% uptime SLA and proactive alerting for critical system metrics</li>
+          <li>Collaborating with cross-functional teams (10+ members) in Agile environment, conducting code reviews, and mentoring junior developers on backend best practices and AWS architecture patterns</li>
+          <li>Optimizing database queries and implementing Redis caching layer, reducing database load by 60% and improving application performance by 3x for high-traffic endpoints</li>
+        </ul>
+      </div>
 
-    <!-- Skills -->
-    <h2 class="text-2xl font-bold mb-3">Technical Expertise</h2>
+      <!-- Internship -->
+      <div class="mb-5 border-l-4 border-gray-400 pl-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900">Frontend Developer Intern</h3>
+            <p class="text-gray-600 font-semibold">CODE CLAUSE | Bengaluru, India</p>
+          </div>
+          <span class="text-gray-600 font-semibold">May 2023 – Jul 2023</span>
+        </div>
+        <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+          <li>Enhanced website performance by 35% through code optimization, lazy loading, and asset compression techniques, resulting in improved user experience and reduced bounce rates</li>
+          <li>Implemented real-time features using WebSockets and Firebase, enabling live notifications and collaborative editing capabilities for 500+ concurrent users</li>
+          <li>Developed responsive UI components using React.js and modern CSS frameworks, ensuring cross-browser compatibility and mobile-first design principles</li>
+        </ul>
+      </div>
+    </section>
 
-    <ul class="text-gray-700 space-y-2">
-      <li><strong>Backend:</strong> Node.js, Express.js, REST, GraphQL, Microservices, Serverless</li>
-      <li><strong>Frontend:</strong> React.js, Next.js, TypeScript, Tailwind CSS</li>
-      <li><strong>Cloud & DevOps:</strong> AWS Lambda, API Gateway, S3, DynamoDB, SQS, SNS, CloudWatch</li>
-      <li><strong>Databases:</strong> MongoDB, PostgreSQL, MySQL, Redis</li>
-      <li><strong>Security:</strong> JWT, OAuth2, RBAC, MFA</li>
-      <li><strong>Tools:</strong> Docker, GitHub Actions, Terraform</li>
-    </ul>
+    <!-- Featured Projects -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">
+        🏆 FLAGSHIP PROJECTS
+      </h2>
 
-    <hr class="my-6">
+      <!-- DevInsights -->
+      <div class="mb-5 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-600">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-xl font-bold text-gray-900">DevInsights – AI-Powered Developer Productivity Analytics SaaS</h3>
+          <span class="text-blue-600">↗</span>
+        </div>
+        <p class="text-sm text-gray-600 mb-3 italic">Production-Grade Multi-Tenant Platform | 15+ AWS Services | Enterprise Architecture</p>
+        <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700 mb-3">
+          <li>Architecting full-stack multi-tenant SaaS platform that integrates with GitHub API to analyze engineering productivity, code quality, and team collaboration metrics in real-time, serving 50+ organizations with isolated data tenancy</li>
+          <li>Designed serverless architecture using AWS Lambda (Node.js + TypeScript), DynamoDB for scalable NoSQL storage, API Gateway for managed APIs, and RDS PostgreSQL for relational data, achieving cost-effective auto-scaling from 0 to 10K+ requests/minute</li>
+          <li>Implemented sophisticated tenant onboarding flow with OAuth 2.0 authentication, role-based access control (RBAC), and GitHub token management, ensuring enterprise-grade security and multi-organization support</li>
+          <li>Built event-driven pipeline using AWS SQS/SNS for asynchronous GitHub webhook processing, Redis for caching analytics data, and CloudWatch for real-time monitoring and automated alerting on performance anomalies</li>
+          <li>Developed React 18 + Next.js dashboard with SSR/ISR for optimal performance, TypeScript for type safety, Recharts for interactive data visualizations, and Tailwind CSS for modern, responsive UI design</li>
+          <li>Integrated OpenAI GPT-4 API for predictive analytics and natural language insights, enabling engineering managers to identify bottlenecks, burnout risks, and sprint inefficiencies through AI-powered recommendations</li>
+          <li>Established CI/CD pipeline with GitHub Actions, Docker containerization, and Terraform for Infrastructure as Code, achieving 80%+ test coverage with Jest and Supertest for automated quality assurance</li>
+        </ul>
+        <p class="text-sm">
+          <span class="font-semibold text-gray-900">Tech Stack:</span>
+          <span class="text-gray-700"> Node.js, Express.js, TypeScript, React 18, Next.js, AWS (Lambda, API Gateway, DynamoDB, RDS PostgreSQL, S3, CloudFront, SQS, SNS, Cognito, CloudWatch), Redis, Docker, GitHub Actions, Terraform, OpenAI API, Jest</span>
+        </p>
+      </div>
 
-    <!-- Experience -->
-    <h2 class="text-2xl font-bold mb-3">Professional Experience</h2>
+      <!-- My Habit -->
+      <div class="mb-5 bg-green-50 p-4 rounded-lg border-l-4 border-green-600">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-xl font-bold text-gray-900">My Habit – Intelligent Habit Tracking & Notification Platform</h3>
+          <a href="https://habit-frontend-psi.vercel.app/" target="_blank" class="text-green-600 hover:text-green-700">↗</a>
+        </div>
+        <p class="text-sm text-gray-600 mb-3 italic">Full-Stack SaaS | Real-Time Notifications | Multi-Platform Integration</p>
+        <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700 mb-3">
+          <li>Built production-ready habit tracking SaaS platform with user authentication, personalized dashboard, and intelligent reminder system serving 100+ early adopters with 95%+ notification delivery success rate</li>
+          <li>Architected scalable backend using Node.js and Express.js with MongoDB for flexible data modeling, implementing RESTful APIs for habit CRUD operations, user management, and notification scheduling</li>
+          <li>Integrated Telegram Bot API for real-time push notifications, building scheduled reminder system with cron jobs and queue management, ensuring reliable delivery across multiple time zones</li>
+          <li>Designed responsive React.js frontend with Next.js for SSR, Tailwind CSS for modern UI/UX, and analytics dashboard showing habit completion rates, streaks, and progress visualization</li>
+          <li>Implemented secure JWT-based authentication with role-based access control, end-to-end encryption for user data, and privacy-first architecture ensuring zero data sharing with third parties</li>
+          <li>Deployed on Vercel (frontend) and AWS (backend), utilizing S3 for media storage and CloudFront CDN for global content delivery with sub-200ms response times</li>
+        </ul>
+        <p class="text-sm">
+          <span class="font-semibold text-gray-900">Tech Stack:</span>
+          <span class="text-gray-700"> Node.js, Express.js, MongoDB, React.js, Next.js, Tailwind CSS, Telegram Bot API, JWT, AWS (S3, CloudFront), Vercel, Cron Jobs</span>
+        </p>
+      </div>
 
-    <h3 class="text-xl font-semibold">Backend Engineer — Aquera Technologies</h3>
-    <p class="text-sm text-gray-600 mb-2">Feb 2025 – Present | Bengaluru</p>
+      <!-- Other Projects -->
+      <div class="space-y-4">
+        <!-- Abhi Book Karo -->
+        <div class="border-l-4 border-gray-400 pl-4">
+          <h3 class="text-lg font-bold text-gray-900">Abhi Book Karo – Home Rental Platform (Airbnb Clone)</h3>
+          <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700 text-sm mt-2">
+            <li>Developed full-stack property rental marketplace with advanced search filters, real-time booking system, and admin dashboard for property management</li>
+            <li>Integrated Razorpay payment gateway for secure transactions, implementing webhook handlers for payment verification and automated booking confirmations</li>
+            <li>Built responsive UI with React.js and implemented image optimization using Cloudinary CDN for fast property photo loading</li>
+          </ul>
+          <p class="text-sm mt-2">
+            <span class="font-semibold">Tech:</span> MERN Stack, Razorpay API, Cloudinary, JWT Authentication
+          </p>
+        </div>
 
-    <ul class="text-gray-700 list-disc ml-6 space-y-2">
-      <li>Architecting serverless microservices using Node.js & AWS for multi-tenant SaaS used by 50+ companies.</li>
-      <li>Reduced API latency by 45% using Redis caching and optimized DB queries.</li>
-      <li>Built CI/CD workflows cutting deployments from 2 hrs → 15 mins.</li>
-      <li>Designed event-driven systems handling 10K+ req/min using SQS/SNS.</li>
-      <li>Maintained 99.9% uptime with CloudWatch & AWS X-Ray monitoring.</li>
-    </ul>
+        <!-- RBCT -->
+        <div class="border-l-4 border-gray-400 pl-4">
+          <h3 class="text-lg font-bold text-gray-900">RBCT – Role-Based Access Control & Admin Panel</h3>
+          <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700 text-sm mt-2">
+            <li>Architected enterprise-grade RBAC system with granular permissions management, supporting multiple user roles (Admin, Manager, User) with hierarchical access controls</li>
+            <li>Implemented secure JWT-based authentication with refresh tokens and session management, utilizing MockAPI for rapid prototyping and API testing</li>
+            <li>Developed comprehensive admin panel with full CRUD operations for user and role management, featuring audit logs and activity tracking</li>
+          </ul>
+          <p class="text-sm mt-2">
+            <span class="font-semibold">Tech:</span> React.js, Node.js, JWT, MockAPI, Role-Based Access Control
+          </p>
+        </div>
 
-    <br>
+        <!-- Hotel Booking -->
+        <div class="border-l-4 border-gray-400 pl-4">
+          <h3 class="text-lg font-bold text-gray-900">Hotel Table Booking System</h3>
+          <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700 text-sm mt-2">
+            <li>Built real-time table reservation system with availability calendar, time-slot management, and automated booking confirmations via email</li>
+            <li>Designed normalized MySQL database schema with optimized queries for concurrent bookings, preventing double-booking through transaction locks</li>
+          </ul>
+          <p class="text-sm mt-2">
+            <span class="font-semibold">Tech:</span> Node.js, MySQL, HTML, CSS, JavaScript
+          </p>
+        </div>
 
-    <h3 class="text-xl font-semibold">Frontend Developer Intern — Code Clause</h3>
-    <p class="text-sm text-gray-600 mb-2">May 2023 – Jul 2023</p>
-
-    <ul class="text-gray-700 list-disc ml-6 space-y-2">
-      <li>Improved site performance by 35% via optimization & lazy loading.</li>
-      <li>Built WebSocket-based real-time features for 500+ concurrent users.</li>
-    </ul>
-
-    <hr class="my-6">
-
-    <!-- Projects -->
-    <h2 class="text-2xl font-bold mb-3">Flagship Projects</h2>
-
-    <h3 class="text-xl font-semibold">DevInsights – AI Developer Analytics SaaS</h3>
-    <p class="text-gray-700">
-      Multi-tenant SaaS analyzing GitHub productivity using AWS serverless + OpenAI GPT.
-    </p>
-
-    <br>
-
-    <h3 class="text-xl font-semibold">My Habit – Habit Tracking SaaS</h3>
-    <p class="text-gray-700">
-      Real-time multi-platform habit reminder system used by 100+ users.
-    </p>
-
-    <hr class="my-6">
+        <!-- Plant Disease -->
+        <div class="border-l-4 border-gray-400 pl-4">
+          <h3 class="text-lg font-bold text-gray-900">Plant Disease Detection System</h3>
+          <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700 text-sm mt-2">
+            <li>Developed machine learning model using Python and TensorFlow/Keras for automated plant disease diagnosis from leaf images with 85%+ accuracy</li>
+            <li>Implemented CNN-based image classification pipeline with data augmentation and transfer learning for improved model performance on limited datasets</li>
+          </ul>
+          <p class="text-sm mt-2">
+            <span class="font-semibold">Tech:</span> Python, TensorFlow, OpenCV, CNN, Image Processing
+          </p>
+        </div>
+      </div>
+    </section>
 
     <!-- Education -->
-    <h2 class="text-2xl font-bold mb-3">Education</h2>
-    <p><strong>B.Tech CSE — Dayananda Sagar University</strong> (2022–2025)</p>
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">
+        🎓 EDUCATION
+      </h2>
+      <div class="border-l-4 border-blue-600 pl-4">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900">Bachelor of Technology in Computer Science & Engineering</h3>
+            <p class="text-blue-600 font-semibold">Dayananda Sagar University, Bengaluru, Karnataka</p>
+            <p class="text-gray-700">
+              <span class="font-semibold">Relevant Coursework:</span> Data Structures & Algorithms, Database Management Systems, Operating Systems, Computer Networks, Cloud Computing, Software Engineering
+            </p>
+          </div>
+          <span class="text-gray-600 font-semibold">Feb 2022 – Jun 2025</span>
+        </div>
+      </div>
+    </section>
 
-    <hr class="my-6">
+    <!-- Achievements & Certifications -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">ACHIEVEMENTS & RECOGNITION</h2>
+      <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+        <li><span class="font-semibold">Special Recognition Award</span> – Aquera Technologies (2025) for exceptional technical contributions and leadership in critical backend projects</li>
+        <li><span class="font-semibold">Hackathon Winner</span> – College-level hackathon for innovative full-stack application development</li>
+        <li><span class="font-semibold">Problem Solving:</span> Solved 100+ Data Structures & Algorithms problems on LeetCode (Easy: 40, Medium: 50, Hard: 10), demonstrating strong analytical and coding skills</li>
+        <li><span class="font-semibold">AWS Cloud Computing</span> – Hands-on experience with 10+ AWS services in production environments</li>
+      </ul>
+    </section>
+
+    <!-- Additional Info -->
+    <section class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">ADDITIONAL INFORMATION</h2>
+      <div class="space-y-2 text-gray-700">
+        <p><span class="font-semibold">Languages:</span> English (Professional), Hindi (Fluent), Kannada (Native)</p>
+        <p><span class="font-semibold">Interests:</span> Contributing to open-source projects, Technical blogging, System design, Cloud architecture patterns, Competitive programming</p>
+        <p><span class="font-semibold">Availability:</span> Immediate / 30 days notice period</p>
+      </div>
+    </section>
 
     <!-- Footer -->
-    <p class="text-center text-sm text-gray-600 italic mt-10">
-      I declare that all information is accurate and reflects my skills & experience.
-    </p>
+    <footer class="border-t-2 border-gray-300 pt-4 mt-8 text-center text-sm text-gray-600">
+      <p class="italic">I declare that the information provided is accurate and reflects my skills and experience in Computer Science and Engineering. I am committed to delivering high-quality, scalable solutions with integrity and technical excellence.</p>
+      <p class="mt-2 font-semibold">SANGAMESH LINGSHETTY</p>
+    </footer>
 
   </div>
 
