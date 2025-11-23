@@ -243,12 +243,12 @@ const Port = () => {
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 mt-8">
                 <a
-                  href="/SANGAMESH_ENG22CS1040.pdf"
-                  target="_blank"
-                  className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-all duration-300 hover:scale-105"
-                >
-                  Download Resume
-                </a>
+  href="/resume.html"
+  target="_blank"
+  className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-all duration-300 hover:scale-105"
+>
+  View Resume
+</a>
                 <a
                   href="https://www.linkedin.com/in/sangamesh-lingshetty-5a6647279"
                   target="_blank"
