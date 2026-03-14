@@ -1,1465 +1,865 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Sun,
-  Moon,
-  Github,
-  Linkedin,
-  Twitter,
-  Mail,
-  Code,
-  BookOpen,
-  User,
-  MessageSquare,
-  Briefcase,
-  ExternalLink,
-  Heart,
-  Terminal,
-  Globe,
-  ArrowRight,
-  Quote,
-  Database,
-  Monitor,
-  FileText,
-  Home,
-  Coffee,
-  Award,
-  TrendingUp,
-  Users,
-  Target,
-  Rocket,
-  CheckCircle,
-} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
-const Port = () => {
-  const [isDark, setIsDark] = useState(true);
-  const [activeSection, setActiveSection] = useState("home");
-  const [scrolled, setScrolled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [slideIn, setSlideIn] = useState({});
+const LINKS = {
+  email: "mailto:sangameshlingshetty@gmail.com",
+  linkedin: "https://www.linkedin.com/in/sangamesh-lingshetty-5a6647279/",
+  github: "https://github.com/sangamesh-Lingshetty",
+  twitter: "https://x.com/Sangamesh9819",
+  hashnode: "https://hashnode.com/@SangameshLingshetty",
+  getquest: "https://getquest.cloud",
+  habitdemo: "https://habit-frontend-psi.vercel.app/",
+  devinsights: "https://github.com/sangamesh-Lingshetty/serverlessLambdaCode",
+  rbac: "https://frontend-assignment-vrv.onrender.com/",
+  deeplock: "https://chromewebstore.google.com/detail/deeplock/hmpcpccdkjjcpccgcjhodnjaaefaeldm",
+  topmate: "https://topmate.io/sangamesha",
+  shapeart: "https://www.3dshapeart.com/",
+};
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      const sections = document.querySelectorAll("[data-scroll]");
+const C = {
+  bg:"#fafaf8", surface:"#fff", border:"#e7e5e4", border2:"#d6d3d1",
+  text:"#1c1917", textMuted:"#78716c", textFaint:"#a8a29e",
+  accent:"#16a34a", accentBg:"#f0fdf4", accentBorder:"#bbf7d0",
+};
 
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight - 100;
-
-        if (isVisible && !slideIn[section.id]) {
-          setSlideIn((prev) => ({ ...prev, [section.id]: true }));
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [slideIn]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const baseStyles = {
-    bg: isDark ? "bg-gray-900" : "bg-gray-50",
-    text: isDark ? "text-gray-100" : "text-gray-900",
-    accent: isDark ? "text-teal-400" : "text-teal-600",
-    card: isDark ? "bg-gray-800/50" : "bg-white",
-    border: isDark ? "border-gray-700" : "border-gray-200",
-    hover: isDark ? "hover:bg-gray-700" : "hover:bg-gray-100",
+// ─── CHATBOT ─────────────────────────────────────────────────────────────────
+const ChatBot = ({ onClose }) => {
+  const [step, setStep] = useState(0);
+  const [persona, setPersona] = useState(null);
+  const personas = [
+    { id:"recruiter", label:"Recruiter / Hiring Manager", icon:"◈" },
+    { id:"founder",   label:"Startup Founder / CTO",      icon:"◎" },
+    { id:"freelance", label:"Looking to hire freelancer",  icon:"◇" },
+    { id:"dev",       label:"Fellow Developer",            icon:"⬡" },
+  ];
+  const responses = {
+    recruiter: {
+      msg: "Sangamesh is actively open to Backend / Full-Stack roles (SDE-2) at AI-first startups. 1+ year production, ships fast, immediate joiner.",
+      links: [
+        { label:"LinkedIn",       href:LINKS.linkedin, icon:"↗" },
+        { label:"Email directly", href:LINKS.email,    icon:"@" },
+        { label:"GitHub",         href:LINKS.github,   icon:"⌥" },
+      ],
+    },
+    founder: {
+      msg: "Sangamesh has shipped 3 live products solo — GetQuest (GDPR SaaS), DeepLock (Chrome Extension), Habit Tracker. He integrates LLMs into real backend workflows. He moves fast.",
+      links: [
+        { label:"GetQuest (live)",    href:LINKS.getquest, icon:"↗" },
+        { label:"DeepLock Extension", href:LINKS.deeplock, icon:"↗" },
+        { label:"Email",              href:LINKS.email,    icon:"@" },
+      ],
+    },
+    freelance: {
+      msg: "Sangamesh does contract work — backend APIs, SaaS products, AWS infra. Book a free intro call on Topmate or email directly.",
+      links: [
+        { label:"Book on Topmate",    href:LINKS.topmate,   icon:"↗" },
+        { label:"Email",              href:LINKS.email,     icon:"@" },
+        { label:"See freelance work", href:"#freelance",    icon:"→" },
+      ],
+    },
+    dev: {
+      msg: "Node.js, TypeScript, AWS serverless, GenAI integrations. Check the GitHub for real code — no toy repos.",
+      links: [
+        { label:"GitHub",        href:LINKS.github,   icon:"⌥" },
+        { label:"Articles",      href:LINKS.hashnode, icon:"✦" },
+        { label:"Topmate (1:1)", href:LINKS.topmate,  icon:"↗" },
+      ],
+    },
   };
+  return (
+    <div style={{position:"fixed",bottom:"1.5rem",right:"1.5rem",width:"min(360px,calc(100vw - 2rem))",background:"#fafaf9",border:"1px solid #e7e5e4",borderRadius:"16px",zIndex:9999,overflow:"hidden",fontFamily:"'DM Mono',monospace",boxShadow:"0 20px 60px rgba(0,0,0,0.12),0 4px 16px rgba(0,0,0,0.06)"}}>
+      <div style={{padding:"14px 16px",borderBottom:"1px solid #e7e5e4",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#f5f5f4"}}>
+        <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+          <div style={{width:7,height:7,borderRadius:"50%",background:"#16a34a",animation:"pulse 2s infinite"}}/>
+          <span style={{color:"#78716c",fontSize:"11px",letterSpacing:"0.1em"}}>SANGAMESH · ONLINE</span>
+        </div>
+        <button onClick={onClose} style={{background:"none",border:"none",color:"#a8a29e",cursor:"pointer",fontSize:"15px",lineHeight:1}}>✕</button>
+      </div>
+      <div style={{padding:"16px"}}>
+        {step===0&&(<>
+          <p style={{color:"#1c1917",fontSize:"13px",lineHeight:1.7,margin:"0 0 16px"}}>Hey 👋 — thanks for stopping by.<br/>Who are you here as?</p>
+          <div style={{display:"flex",flexDirection:"column",gap:"7px"}}>
+            {personas.map(p=>(
+              <button key={p.id} onClick={()=>{setPersona(p.id);setStep(1);}} style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"8px",padding:"10px 14px",color:"#57534e",fontSize:"13px",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:"10px",transition:"all 0.15s"}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor="#16a34a";e.currentTarget.style.color="#1c1917";}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor="#e7e5e4";e.currentTarget.style.color="#57534e";}}>
+                <span style={{color:"#16a34a",fontSize:"13px"}}>{p.icon}</span>{p.label}
+              </button>
+            ))}
+          </div>
+        </>)}
+        {step===1&&persona&&(<>
+          <p style={{color:"#1c1917",fontSize:"13px",lineHeight:1.7,margin:"0 0 16px"}}>{responses[persona].msg}</p>
+          <div style={{display:"flex",flexDirection:"column",gap:"7px"}}>
+            {responses[persona].links.map(l=>(
+              <a key={l.label} href={l.href} target={l.href.startsWith("#")?"_self":"_blank"} rel="noreferrer"
+                onClick={l.href.startsWith("#")?(e)=>{e.preventDefault();onClose();document.querySelector(l.href)?.scrollIntoView({behavior:"smooth"});}:undefined}
+                style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"8px",padding:"10px 14px",color:"#16a34a",fontSize:"13px",cursor:"pointer",textDecoration:"none",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <span>{l.label}</span>
+                <span style={{fontSize:"11px",opacity:0.5}}>{l.icon}</span>
+              </a>
+            ))}
+          </div>
+          <button onClick={()=>{setStep(0);setPersona(null);}} style={{background:"none",border:"none",color:"#a8a29e",fontSize:"12px",cursor:"pointer",marginTop:"12px",padding:0}}>← back</button>
+        </>)}
+      </div>
+    </div>
+  );
+};
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-32 h-32 mb-6 mx-auto">
-            <div className="w-full h-full rounded-full bg-teal-500/20 animate-pulse flex items-center justify-center">
-              <Code className="w-16 h-16 text-teal-400 animate-bounce" />
+// ─── TESTIMONIALS MARQUEE ────────────────────────────────────────────────────
+const Testimonials = () => {
+  const all = [
+    { name:"Abhishek", role:"Startup Founder", text:"Delivered a clean, fast backend API within the week. No back-and-forth — just shipped. Exactly what an early-stage team needs." },
+    { name:"Anjali",   role:"Product Manager",  text:"He doesn't just write code — he thinks through the problem first. The monitoring tool he built saved us hours every week in incident response." },
+    { name:"Vivek",    role:"Co-Founder, 3DShapeArt", text:"Communication was clear, deadlines were met, and the code was clean enough that we could maintain it easily." },
+    { name:"Abhishek", role:"Startup Founder", text:"Delivered a clean, fast backend API within the week. No back-and-forth — just shipped. Exactly what an early-stage team needs." },
+    { name:"Anjali",   role:"Product Manager",  text:"He doesn't just write code — he thinks through the problem first. The monitoring tool he built saved us hours every week in incident response." },
+    { name:"Vivek",    role:"Co-Founder, 3DShapeArt", text:"Communication was clear, deadlines were met, and the code was clean enough that we could maintain it easily." },
+  ];
+  return (
+    <div style={{overflow:"hidden",position:"relative",padding:"8px 0"}}>
+      <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}} .mq{display:flex;gap:20px;animation:marquee 32s linear infinite;width:max-content;} .mq:hover{animation-play-state:paused;}`}</style>
+      <div style={{position:"absolute",left:0,top:0,bottom:0,width:80,background:"linear-gradient(to right,#fafaf8,transparent)",zIndex:2,pointerEvents:"none"}}/>
+      <div style={{position:"absolute",right:0,top:0,bottom:0,width:80,background:"linear-gradient(to left,#fafaf8,transparent)",zIndex:2,pointerEvents:"none"}}/>
+      <div className="mq">
+        {all.map((t,i)=>(
+          <div key={i} style={{width:300,flexShrink:0,background:"#fff",border:"1px solid #e7e5e4",borderRadius:"14px",padding:"22px 24px"}}>
+            <div style={{display:"flex",gap:"3px",marginBottom:"14px"}}>{[1,2,3,4,5].map(s=><span key={s} style={{color:"#f59e0b",fontSize:"13px"}}>★</span>)}</div>
+            <p style={{fontSize:"13px",color:"#44403c",lineHeight:1.75,marginBottom:"18px",fontStyle:"italic"}}>"{t.text}"</p>
+            <div style={{display:"flex",alignItems:"center",gap:"10px",borderTop:"1px solid #f5f5f4",paddingTop:"14px"}}>
+              <div style={{width:34,height:34,borderRadius:"50%",background:"#f0fdf4",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"13px",fontWeight:600,color:"#16a34a",fontFamily:"'DM Mono',monospace",flexShrink:0}}>{t.name[0]}</div>
+              <div>
+                <div style={{fontSize:"13px",fontWeight:500,color:"#1c1917"}}>{t.name}</div>
+                <div style={{fontSize:"11px",color:"#a8a29e",fontFamily:"'DM Mono',monospace"}}>{t.role}</div>
+              </div>
             </div>
           </div>
-          <div className="text-teal-400 text-xl font-bold animate-pulse">
-            Loading Portfolio...
-          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ─── BUILDER DASHBOARD ───────────────────────────────────────────────────────
+const BuilderDashboard = () => {
+  const items = [
+    { label:"Years Building",    value:"1.2", unit:"yrs",    color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0", desc:"Since first deploy" },
+    { label:"Side Projects",     value:"6",   unit:"apps",   color:"#2563eb", bg:"#eff6ff", border:"#bfdbfe", desc:"GetQuest · Habit · DeepLock + more" },
+    { label:"Chrome Extension",  value:"1",   unit:"live",   color:"#7c3aed", bg:"#f5f3ff", border:"#ddd6fe", desc:"DeepLock — on Web Store" },
+    { label:"App in Progress",   value:"1",   unit:"WIP",    color:"#ea580c", bg:"#fff7ed", border:"#fed7aa", desc:"DeepLock App (mobile)" },
+    { label:"Live SaaS Products",value:"3",   unit:"live",   color:"#0891b2", bg:"#ecfeff", border:"#a5f3fc", desc:"GetQuest · Habit · DevInsights" },
+    { label:"DSA Solved",        value:"500+",unit:"problems",color:"#dc2626",bg:"#fef2f2", border:"#fecaca", desc:"LeetCode + GFG" },
+  ];
+  return (
+    <div style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"16px",padding:"24px",boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"20px"}}>
+        <div>
+          <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#a8a29e",letterSpacing:"0.1em",marginBottom:"4px"}}>BUILDER STATS</div>
+          <div style={{fontSize:"16px",fontWeight:600,color:"#1c1917"}}>What I've shipped</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"6px",background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"6px",padding:"4px 10px"}}>
+          <div style={{width:6,height:6,borderRadius:"50%",background:"#16a34a",animation:"pulse 2s infinite"}}/>
+          <span style={{fontSize:"11px",color:"#16a34a",fontFamily:"'DM Mono',monospace"}}>Active builder</span>
         </div>
       </div>
-    );
-  }
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"12px"}}>
+        {items.map(item=>(
+          <div key={item.label} style={{background:item.bg,border:`1px solid ${item.border}`,borderRadius:"10px",padding:"14px 16px"}}>
+            <div style={{display:"flex",alignItems:"baseline",gap:"4px",marginBottom:"4px"}}>
+              <span style={{fontSize:"24px",fontWeight:700,color:item.color,fontFamily:"'DM Mono',monospace",lineHeight:1}}>{item.value}</span>
+              <span style={{fontSize:"10px",color:item.color,fontFamily:"'DM Mono',monospace",opacity:0.7}}>{item.unit}</span>
+            </div>
+            <div style={{fontSize:"12px",fontWeight:500,color:"#1c1917",marginBottom:"3px"}}>{item.label}</div>
+            <div style={{fontSize:"10px",color:"#78716c"}}>{item.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-  const navItems = [
-    { id: "home", icon: <Home size={16} />, label: "Home" },
-    { id: "about", icon: <User size={16} />, label: "About" },
-    { id: "experience", icon: <Briefcase size={16} />, label: "Experience" },
-    { id: "projects", icon: <Code size={16} />, label: "Projects" },
-    { id: "skills", icon: <Terminal size={16} />, label: "Skills" },
-    { id: "articles", icon: <FileText size={16} />, label: "Articles" },
-    { id: "contact", icon: <MessageSquare size={16} />, label: "Contact" },
+// ─── NOW PAGE ────────────────────────────────────────────────────────────────
+const NowPage = () => {
+  const now = [
+    { color:"#7c3aed", bg:"#f5f3ff", border:"#ddd6fe", label:"Building",  item:"DeepLock mobile app",           detail:"React Native port of the Chrome Extension — App Store Q2 2025" },
+    { color:"#0891b2", bg:"#ecfeff", border:"#a5f3fc", label:"Learning",  item:"Kafka & event-driven patterns",  detail:"For DevInsights AI pipeline — reading Designing Data-Intensive Applications" },
+    { color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0", label:"At work",   item:"Observability at AqueraLabs",    detail:"Distributed tracing on Lambda functions — improving incident response" },
+    { color:"#b45309", bg:"#fffbeb", border:"#fde68a", label:"Reading",   item:"Designing Data-Intensive Apps",  detail:"Kleppmann — replication, partitioning, consensus" },
+  ];
+  return (
+    <div style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"16px",padding:"24px"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"20px",flexWrap:"wrap",gap:"8px"}}>
+        <div>
+          <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#a8a29e",letterSpacing:"0.1em",marginBottom:"4px"}}>NOW PAGE</div>
+          <div style={{fontSize:"15px",fontWeight:600,color:"#1c1917"}}>What I'm doing right now</div>
+        </div>
+        <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:"#a8a29e",background:"#f5f5f4",padding:"4px 10px",borderRadius:"4px"}}>Updated Mar 2025</div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"10px"}}>
+        {now.map((n,i)=>(
+          <div key={i} style={{background:n.bg,border:`1px solid ${n.border}`,borderRadius:"10px",padding:"14px 16px"}}>
+            <span style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:n.color,letterSpacing:"0.06em",display:"block",marginBottom:"6px"}}>{n.label}</span>
+            <div style={{fontSize:"13px",fontWeight:500,color:"#1c1917",marginBottom:"3px"}}>{n.item}</div>
+            <div style={{fontSize:"12px",color:"#78716c",lineHeight:1.5}}>{n.detail}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ─── HOW I WORK ──────────────────────────────────────────────────────────────
+const HowIWork = () => {
+  const traits = [
+    { icon:"⚡", title:"Ship first, refine after",     desc:"Working code > perfect code. I push fast, then iterate. Waiting for perfect ships nothing." },
+    { icon:"📡", title:"Async-first",                  desc:"Clear written updates. I flag blockers early and don't disappear mid-sprint." },
+    { icon:"🔧", title:"Own the whole thing",           desc:"I debug in prod at 2am if needed. I don't hand things off at the edge of my ticket." },
+    { icon:"💡", title:"Ask why before how",            desc:"Most bugs are caused by solving the wrong problem cleanly. I understand before I implement." },
+  ];
+  return (
+    <div style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"16px",padding:"24px"}}>
+      <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#a8a29e",letterSpacing:"0.1em",marginBottom:"4px"}}>WORKING STYLE</div>
+      <div style={{fontSize:"15px",fontWeight:600,color:"#1c1917",marginBottom:"18px"}}>How I work</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px"}}>
+        {traits.map((t,i)=>(
+          <div key={i} style={{padding:"14px",background:"#fafaf8",border:"1px solid #f5f5f4",borderRadius:"10px"}}>
+            <div style={{display:"flex",alignItems:"center",gap:"7px",marginBottom:"5px"}}>
+              <span style={{fontSize:"14px"}}>{t.icon}</span>
+              <span style={{fontSize:"12px",fontWeight:500,color:"#1c1917"}}>{t.title}</span>
+            </div>
+            <p style={{fontSize:"12px",color:"#78716c",lineHeight:1.55}}>{t.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ─── ASK ME ABOUT ────────────────────────────────────────────────────────────
+const AskMeAbout = () => {
+  const topics = [
+    { topic:"Multi-tenant SaaS backends",            depth:"Deep",    color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0" },
+    { topic:"AWS Lambda + event-driven arch",         depth:"Deep",    color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0" },
+    { topic:"LLM integrations in backend",           depth:"Deep",    color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0" },
+    { topic:"Scalable REST API design",              depth:"Deep",    color:"#16a34a", bg:"#f0fdf4", border:"#bbf7d0" },
+    { topic:"Redis caching strategies",              depth:"Good",    color:"#2563eb", bg:"#eff6ff", border:"#bfdbfe" },
+    { topic:"Founding a solo SaaS (GetQuest)",       depth:"Built it",color:"#7c3aed", bg:"#f5f3ff", border:"#ddd6fe" },
+  ];
+  return (
+    <div style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"16px",padding:"24px"}}>
+      <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#a8a29e",letterSpacing:"0.1em",marginBottom:"4px"}}>INTERVIEW READY</div>
+      <div style={{fontSize:"15px",fontWeight:600,color:"#1c1917",marginBottom:"5px"}}>Ask me about</div>
+      <p style={{fontSize:"11px",color:"#a8a29e",marginBottom:"16px",fontFamily:"'DM Mono',monospace"}}>Topics I can go deep on</p>
+      <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
+        {topics.map((t,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"12px",padding:"9px 12px",background:t.bg,border:`1px solid ${t.border}`,borderRadius:"7px"}}>
+            <span style={{fontSize:"13px",color:"#1c1917"}}>{t.topic}</span>
+            <span style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:t.color,flexShrink:0}}>{t.depth}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ─── TECH DECISIONS ──────────────────────────────────────────────────────────
+const TechDecisions = () => {
+  const decisions = [
+    {
+      question:"Why Lambda over EC2 for GetQuest?",
+      answer:"GetQuest has bursty traffic — vendor reviews happen in clusters. Lambda auto-scales, zero ops, and pay-per-request made more sense than managing instances at early stage.",
+      tags:["AWS Lambda","Cost","Scalability"],
+    },
+    {
+      question:"Why Supabase over raw Postgres?",
+      answer:"Needed row-level security for multi-tenant isolation and GDPR compliance without building auth from scratch. Traded some query control for 3 weeks of engineering time.",
+      tags:["Supabase","GDPR","Multi-tenant"],
+    },
+    {
+      question:"Why Redis for the monitoring tool?",
+      answer:"Log aggregation was hammering MySQL on every page load. Redis with 30s TTL cut DB load 60% — monitoring doesn't need millisecond freshness.",
+      tags:["Redis","MySQL","Performance"],
+    },
+  ];
+  return (
+    <div style={{background:"#fff",border:"1px solid #e7e5e4",borderRadius:"16px",padding:"24px"}}>
+      <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#a8a29e",letterSpacing:"0.1em",marginBottom:"4px"}}>ENGINEERING THINKING</div>
+      <div style={{fontSize:"15px",fontWeight:600,color:"#1c1917",marginBottom:"5px"}}>Why I chose what I chose</div>
+      <p style={{fontSize:"11px",color:"#a8a29e",marginBottom:"20px",fontFamily:"'DM Mono',monospace"}}>Real decisions from real projects</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"16px"}}>
+        {decisions.map((d,i)=>(
+          <div key={i} style={{borderLeft:"3px solid #e7e5e4",paddingLeft:"14px"}}>
+            <div style={{fontSize:"13px",fontWeight:500,color:"#1c1917",marginBottom:"6px"}}>{d.question}</div>
+            <p style={{fontSize:"12px",color:"#78716c",lineHeight:1.65,marginBottom:"10px"}}>{d.answer}</p>
+            <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
+              {d.tags.map(t=><span key={t} style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:"#78716c",background:"#f5f5f4",border:"1px solid #e7e5e4",borderRadius:"4px",padding:"2px 7px"}}>{t}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+
+// ─── MAIN ─────────────────────────────────────────────────────────────────────
+export default function Portfolio() {
+  const [botOpen,setBotOpen]=useState(false);
+  const [activeSection,setActiveSection]=useState("home");
+  const [menuOpen,setMenuOpen]=useState(false);
+
+  useEffect(()=>{
+    const s=()=>{
+      const ids=["home","about","work","projects","freelance","skills","thinking","contact"];
+      for(const id of [...ids].reverse()){
+        const el=document.getElementById(id);
+        if(el&&window.scrollY>=el.offsetTop-120){setActiveSection(id);break;}
+      }
+    };
+    window.addEventListener("scroll",s,{passive:true});
+    return()=>window.removeEventListener("scroll",s);
+  },[]);
+
+  useEffect(()=>{const t=setTimeout(()=>setBotOpen(true),4000);return()=>clearTimeout(t);},[]);
+
+  const scrollTo=(id)=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
+
+  const navItems=[
+    {id:"home",     label:"Home"},
+    {id:"about",    label:"About"},
+    {id:"work",     label:"Work"},
+    {id:"projects", label:"Projects"},
+    {id:"freelance",label:"Freelance"},
+    {id:"skills",   label:"Skills"},
+    {id:"thinking", label:"Thinking"},
+    {id:"contact",  label:"Contact"},
   ];
 
-  const handleClick = (id) => {
-    setActiveSection(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <div
-      className={`${baseStyles.bg} ${baseStyles.text} min-h-screen transition-colors duration-500`}
-    >
-      {/* Navigation */}
-      <nav
-        className={`fixed top-0 md:top-6 left-0 md:left-1/2 w-full md:w-auto transform md:-translate-x-1/2 z-50 px-2 md:px-4 py-2 md:rounded-full border ${
-          baseStyles.border
-        } ${baseStyles.card} backdrop-blur-lg transition-all duration-300 ${
-          scrolled ? "shadow-lg" : ""
-        }`}
-      >
-        <div className="w-full flex items-center justify-between sm:justify-center gap-1 sm:gap-2 md:gap-4 overflow-x-auto px-2 py-1 sm:px-4 sm:py-2 no-scrollbar">
-          {navItems.map(({ id, icon, label }) => (
-            <button
-              key={id}
-              onClick={() => handleClick(id)}
-              className={`min-w-fit px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs md:text-sm font-medium transition-all duration-300 flex items-center gap-1 sm:gap-1.5 md:gap-2 whitespace-nowrap ${
-                activeSection === id
-                  ? `${
-                      isDark
-                        ? "bg-teal-500/20 text-teal-400"
-                        : "bg-teal-500/10 text-teal-600"
-                    }`
-                  : "hover:bg-gray-100 dark:hover:bg-gray-800"
-              }`}
-            >
-              <span className="w-4 sm:w-5">{icon}</span>
-              <span className="hidden sm:inline">{label}</span>
-            </button>
+    <div style={{background:C.bg,color:C.text,minHeight:"100vh",fontFamily:"'DM Sans','Segoe UI',sans-serif",overflowX:"hidden"}}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+        *{box-sizing:border-box;margin:0;padding:0;}
+        html{scroll-behavior:smooth;}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+        .tag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-family:'DM Mono',monospace;background:#f5f5f4;color:#78716c;border:1px solid #e7e5e4;}
+        .tag.green{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
+        .tag.blue{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+        .tag.amber{background:#fffbeb;color:#b45309;border-color:#fde68a;}
+        .tag.purple{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe;}
+        .tag.red{background:#fef2f2;color:#b91c1c;border-color:#fecaca;}
+        .card{background:#fff;border:1px solid #e7e5e4;border-radius:12px;padding:24px;}
+        a{color:inherit;text-decoration:none;}
+        .nav-link{background:none;border:none;color:#78716c;font-size:13px;cursor:pointer;padding:5px 10px;border-radius:6px;transition:color 0.15s;font-family:'DM Sans',sans-serif;}
+        .nav-link:hover,.nav-link.active{color:#1c1917;}
+        .nav-link.active{background:#f5f5f4;}
+        .btn-primary{background:#16a34a;color:#fff;font-weight:600;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;transition:background 0.15s;}
+        .btn-primary:hover{background:#15803d;}
+        .btn-outline{background:#fff;color:#1c1917;font-weight:500;border:1px solid #e7e5e4;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color 0.15s;display:inline-flex;align-items:center;}
+        .btn-outline:hover{border-color:#a8a29e;}
+        .skill-bar{height:3px;background:#f5f5f4;border-radius:3px;overflow:hidden;}
+        .skill-fill{height:100%;border-radius:3px;}
+        .project-card{background:#fff;border:1px solid #e7e5e4;border-radius:12px;padding:24px;transition:box-shadow 0.2s,border-color 0.2s;}
+        .project-card:hover{border-color:#d6d3d1;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+        .section-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#a8a29e;text-transform:uppercase;margin-bottom:10px;}
+        @media(max-width:768px){
+          .three-col{grid-template-columns:1fr!important;}
+          .two-col{grid-template-columns:1fr!important;}
+          .stats-grid{grid-template-columns:repeat(2,1fr)!important;}
+          .dash-grid{grid-template-columns:repeat(2,1fr)!important;}
+          .work-grid{grid-template-columns:repeat(2,1fr)!important;}
+          .desktop-nav{display:none!important;}
+          .mob-btn{display:flex!important;}
+        }
+        @media(min-width:769px){.mob-btn{display:none!important;}.mob-menu{display:none!important;}}
+      `}</style>
+
+      {/* ── NAV ── */}
+      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,background:"rgba(250,250,248,0.92)",backdropFilter:"blur(12px)",borderBottom:`1px solid ${C.border}`,padding:"0 24px",height:"56px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <button onClick={()=>scrollTo("home")} style={{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:"8px"}}>
+          <span style={{fontFamily:"'DM Mono',monospace",fontSize:"14px",color:C.accent,fontWeight:500}}>SL</span>
+          <span style={{color:C.textFaint,fontSize:"13px"}}>sangamesh.vercel.app</span>
+        </button>
+        <div className="desktop-nav" style={{display:"flex",gap:"1px"}}>
+          {navItems.map(n=>(
+            <button key={n.id} onClick={()=>scrollTo(n.id)} className={`nav-link${activeSection===n.id?" active":""}`}>{n.label}</button>
           ))}
-          <button
-            onClick={() => setIsDark(!isDark)}
-            className="min-w-fit p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            {isDark ? (
-              <Sun size={16} className="sm:w-5 sm:h-5" />
-            ) : (
-              <Moon size={16} className="sm:w-5 sm:h-5" />
-            )}
-          </button>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:"6px",background:C.accentBg,border:`1px solid ${C.accentBorder}`,borderRadius:"6px",padding:"5px 12px"}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:C.accent,animation:"pulse 2s infinite"}}/>
+            <span style={{fontSize:"11px",color:C.accent,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>Open to Work</span>
+          </div>
+          <button className="mob-btn" onClick={()=>setMenuOpen(o=>!o)} style={{background:"none",border:`1px solid ${C.border}`,color:C.textMuted,cursor:"pointer",fontSize:"16px",display:"none",width:36,height:36,borderRadius:8,alignItems:"center",justifyContent:"center"}}>☰</button>
         </div>
       </nav>
 
-      {/* Social Links */}
-      <div className="fixed left-6 top-1/2 transform -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4">
-        {[
-          {
-            Icon: Github,
-            label: "GitHub",
-            href: "https://github.com/sangamesh-Lingshetty",
-          },
-          {
-            Icon: Linkedin,
-            label: "LinkedIn",
-            href: "https://www.linkedin.com/in/sangamesh-lingshetty-5a6647279",
-          },
-          {
-            Icon: Twitter,
-            label: "Twitter",
-            href: "https://x.com/Sangamesh9819",
-          },
-          {
-            Icon: Mail,
-            label: "Email",
-            href: "mailto:sangameshlingshetty@gmail.com",
-          },
-        ].map(({ Icon, label, href }) => (
-          <a
-            key={label}
-            target="_blank"
-            href={href}
-            className={`p-3 rounded-full border ${baseStyles.border} ${baseStyles.card} ${baseStyles.hover} transition-all duration-300 hover:scale-110 group relative`}
-          >
-            <Icon size={20} />
-            <span className="absolute left-14 px-2 py-1 text-sm rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-              {label}
-            </span>
-          </a>
-        ))}
-      </div>
+      {menuOpen&&(
+        <div className="mob-menu" style={{position:"fixed",top:56,left:0,right:0,zIndex:99,background:C.surface,borderBottom:`1px solid ${C.border}`,padding:"10px 16px",display:"flex",flexDirection:"column",gap:"2px"}}>
+          {navItems.map(n=><button key={n.id} onClick={()=>scrollTo(n.id)} className="nav-link" style={{textAlign:"left"}}>{n.label}</button>)}
+        </div>
+      )}
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-20 md:pt-32 pb-20">
-        {/* Hero Section */}
-        <section id="home" className="py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse mr-2" />
-                <span className="text-sm text-green-500">
-                  Open to Backend roles (SDE-1/2) | Remote
-                </span>
-              </div>
+      <main style={{paddingTop:"56px"}}>
 
-              <div>
-                <h1 className="text-5xl md:text-7xl font-bold mb-4">
-                  SANGAMESH
-                  <span className="block text-teal-400">LINGSHETTY</span>
-                </h1>
-                <p className="text-xl md:text-2xl opacity-80">
-                  Backend Engineer Building Scalable Systems
-                </p>
-                <p className="text-lg opacity-60 mt-2">
-                  Currently at Aquera | 11 months production experience
-                </p>
-              </div>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-3 gap-4 mt-8">
-                <div
-                  className={`${baseStyles.card} p-4 rounded-xl border ${baseStyles.border} text-center`}
-                >
-                  <div className="text-3xl font-bold text-teal-400">10+</div>
-                  <div className="text-sm opacity-60 mt-1">
-                    Real Users in Production
-                  </div>
-                </div>
-                <div
-                  className={`${baseStyles.card} p-4 rounded-xl border ${baseStyles.border} text-center`}
-                >
-                  <div className="text-3xl font-bold text-teal-400">50K+</div>
-                  <div className="text-sm opacity-60 mt-1">
-                    API Requests Daily
-                  </div>
-                </div>
-                <div
-                  className={`${baseStyles.card} p-4 rounded-xl border ${baseStyles.border} text-center`}
-                >
-                  <div className="text-3xl font-bold text-teal-400">99%+</div>
-                  <div className="text-sm opacity-60 mt-1">
-                    Uptime Maintained
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 mt-8">
-                <a
-  href="/resume.html"
-  target="_blank"
-  className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-all duration-300 hover:scale-105"
->
-  View Resume
-</a>
-                <a
-                  href="https://www.linkedin.com/in/sangamesh-lingshetty-5a6647279"
-                  target="_blank"
-                  className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all duration-300`}
-                >
-                  LinkedIn
-                </a>
-                <a
-                  href="https://github.com/sangamesh-Lingshetty"
-                  target="_blank"
-                  className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all duration-300`}
-                >
-                  GitHub
-                </a>
-              </div>
+        {/* ── HERO ── */}
+        <section id="home" style={{minHeight:"100vh",display:"flex",alignItems:"center",padding:"0 24px",maxWidth:"1100px",margin:"0 auto"}}>
+          <div style={{width:"100%",animation:"fadeUp 0.7s ease",paddingTop:"40px",paddingBottom:"40px"}}>
+            <p style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:C.textFaint,letterSpacing:"0.12em",marginBottom:"18px"}}>BACKEND ENGINEER · BUILDER · OPEN TO WORK</p>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"24px",alignItems:"center"}}>
+              <span className="tag green">Backend Engineer</span>
+              <span className="tag blue">AI Integrations</span>
+              <span className="tag amber">Bengaluru · Remote OK</span>
+              <span className="tag purple">SDE-2</span>
             </div>
-
-            {/* Profile Image */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full blur-2xl opacity-20 animate-pulse" />
-                <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-teal-500/50">
-                  <img
-                    src="/Gemini_Generated_Image_rk0rmmrk0rmmrk0r.png"
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section
-          id="about"
-          data-scroll
-          className={`py-20 transform transition-all duration-1000 ${
-            slideIn.about
-              ? "translate-x-0 opacity-100"
-              : "-translate-x-full opacity-0"
-          }`}
-        >
-          <h2 className="text-3xl font-bold mb-8">About Me</h2>
-          <div
-            className={`${baseStyles.card} p-8 rounded-xl border ${baseStyles.border}`}
-          >
-            <div className="space-y-6 text-lg leading-relaxed">
-              <p>
-                Backend Engineer at Aquera with{" "}
-                <strong>11 months of hands-on experience</strong> building
-                production-grade systems using Node.js, Express, PostgreSQL, and
-                AWS. I specialize in building scalable APIs, microservices
-                architecture, and automation tools.
-              </p>
-
-              <div>
-                <h3 className="text-xl font-bold text-teal-400 mb-3 flex items-center gap-2">
-                  <Target size={24} />
-                  What I Do Best:
-                </h3>
-                <ul className="space-y-2 ml-6">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Design RESTful APIs handling 50K+ daily requests
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Architect backend systems for enterprise SaaS applications
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Optimize database queries and implement caching strategies
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Automate workflows using GitHub Actions, cron jobs, webhooks
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Build developer tools and productivity solutions
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-teal-400 mb-3 flex items-center gap-2">
-                  <Briefcase size={24} />
-                  At Aquera:
-                </h3>
-                <ul className="space-y-2 ml-6">
-                  <li>
-                    • Building backend infrastructure for 1000+ enterprise
-                    customers
-                  </li>
-                  <li>• Processing 100K+ transactions monthly</li>
-                  <li>• Improved system performance by 40%</li>
-                  <li>
-                    • Working with: Node.js, Express, PostgreSQL, AWS, Docker
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-teal-400 mb-3 flex items-center gap-2">
-                  <Rocket size={24} />
-                  Side Projects:
-                </h3>
-                <ul className="space-y-2 ml-6">
-                  <li>• Habit Tracker - 10+ active daily users via Telegram</li>
-                  <li>
-                    • Dev Insight - Enterprise developer analytics (in progress)
-                  </li>
-                  <li>• Multiple full-stack apps with production deployment</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-teal-400 mb-3 flex items-center gap-2">
-                  <TrendingUp size={24} />
-                  Technical Foundation:
-                </h3>
-                <ul className="space-y-2 ml-6">
-                  <li>• 500+ DSA problems solved</li>
-                  <li>• Strong system design understanding</li>
-                  <li>• CI/CD pipelines experience</li>
-                  <li>• Active open source contributor</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <section id="experience" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">Professional Experience</h2>
-
-          {/* Aquera */}
-          <div
-            className={`${baseStyles.card} p-8 rounded-xl border-2 border-teal-500/30 mb-8`}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-teal-400">
-                  Backend Engineer @ AQUERA
-                </h3>
-                <p className="text-lg opacity-80 mt-1">
-                  June 2024 - Present | Bengaluru (11 months)
-                </p>
-              </div>
-              <Briefcase className="text-teal-400" size={32} />
-            </div>
-
-            <p className="text-lg opacity-90 mb-6">
-              Building scalable backend systems for enterprise SaaS platform
-              serving 1000+ customers.
+            <h1 style={{fontSize:"clamp(42px,8vw,88px)",fontWeight:600,lineHeight:1.04,letterSpacing:"-0.03em",marginBottom:"20px",color:"#1c1917"}}>
+              Sangamesh<br/><span style={{color:C.accent}}>Lingshetty</span>
+            </h1>
+            <p style={{fontSize:"clamp(16px,2vw,20px)",color:C.textMuted,maxWidth:"520px",lineHeight:1.7,marginBottom:"32px"}}>
+              I build backends that don't break. Shipped 3 live products, 1 Chrome Extension, integrating LLMs into production — currently at AqueraLabs, looking for what's next.
             </p>
-
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-bold text-lg mb-2">
-                  Key Responsibilities:
-                </h4>
-                <ul className="space-y-2 ml-4">
-                  <li>
-                    • Design and develop RESTful APIs using Node.js & Express
-                  </li>
-                  <li>
-                    • Architect database schemas and optimize query performance
-                  </li>
-                  <li>• Implement caching strategies using Redis</li>
-                  <li>• Build automation tools for internal workflows</li>
-                  <li>• Deploy and maintain services on AWS infrastructure</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-lg mb-2 text-teal-400">
-                  Impact & Achievements:
-                </h4>
-                <ul className="space-y-2 ml-4">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-green-500 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Built features processing 100K+ monthly transactions
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-green-500 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Reduced API response time by 40%
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-green-500 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Implemented automated testing reducing bugs by 30%
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-green-500 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Contributed to architecture serving 50K+ daily requests
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-green-500 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    Maintained 99%+ uptime across all services
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-lg mb-2">Tech Stack:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "Node.js",
-                    "Express.js",
-                    "PostgreSQL",
-                    "AWS",
-                    "Docker",
-                    "Redis",
-                    "Git",
-                    "GitHub Actions",
-                    "REST APIs",
-                    "Microservices",
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-teal-500/10 text-teal-400 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <div style={{display:"flex",gap:"12px",flexWrap:"wrap",marginBottom:"56px"}}>
+              <button className="btn-primary" onClick={()=>scrollTo("contact")}>Get in touch →</button>
+              <button className="btn-outline" onClick={()=>scrollTo("projects")}>View my work</button>
+              <a href={LINKS.github} target="_blank" rel="noreferrer" className="btn-outline">GitHub ↗</a>
+              <a href={LINKS.topmate} target="_blank" rel="noreferrer" className="btn-outline">Book a call ↗</a>
             </div>
-          </div>
-
-          {/* Previous Experience */}
-          <div className="space-y-6">
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border}`}
-            >
-              <div className="flex items-start gap-4">
-                <Code className="text-teal-400 mt-1" size={24} />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="text-xl font-bold">
-                        Web Developer Intern
-                      </h3>
-                      <p className="opacity-80">CODE CLAUSE</p>
-                    </div>
-                    <span className="text-sm opacity-60">July 2023</span>
-                  </div>
-                  <p className="opacity-80 text-sm">
-                    Enhanced e-commerce site performance by 20%, implemented
-                    real-time data features using WebSockets, and developed
-                    real-time order tracking system using Firebase.
-                  </p>
+            <div className="stats-grid" style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:C.border,borderRadius:"12px",overflow:"hidden",maxWidth:"620px",boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
+              {[
+                {num:"1.2yr", label:"Production Exp."},
+                {num:"3",     label:"Live SaaS Products"},
+                {num:"1",     label:"Chrome Extension"},
+                {num:"500+",  label:"DSA Solved"},
+              ].map(s=>(
+                <div key={s.label} style={{background:C.surface,padding:"18px 14px",textAlign:"center"}}>
+                  <span style={{display:"block",fontFamily:"'DM Mono',monospace",fontSize:"20px",fontWeight:600,color:C.text}}>{s.num}</span>
+                  <span style={{display:"block",fontSize:"11px",color:C.textFaint,marginTop:"4px"}}>{s.label}</span>
                 </div>
-              </div>
-            </div>
-
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border}`}
-            >
-              <div className="flex items-start gap-4">
-                <BookOpen className="text-teal-400 mt-1" size={24} />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="text-xl font-bold">
-                        Bachelor's in Computer Science and Engineering
-                      </h3>
-                      <p className="opacity-80">Dayananda Sagar University</p>
-                    </div>
-                    <span className="text-sm opacity-60">2022 - 2025</span>
-                  </div>
-                  <p className="opacity-80 text-sm">
-                    Developed hands-on projects including drone technology and
-                    database management systems. Strong foundation in
-                    algorithms, system design, and software engineering.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">Featured Projects</h2>
+        {/* ── BUILDER DASHBOARD ── */}
+        <section style={{padding:"0 24px 40px",maxWidth:"1100px",margin:"0 auto"}}>
+          <BuilderDashboard/>
+        </section>
 
-          {/* Habit Tracker - Highlighted */}
-          <div
-            className={`${baseStyles.card} p-8 rounded-xl border-2 border-teal-500 mb-12`}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <h3 className="text-3xl font-bold text-teal-400 mb-2">
-                  HABIT TRACKER
-                </h3>
-                <p className="text-lg opacity-80">Real-World SaaS Product</p>
+        {/* ── NOW PAGE ── */}
+        <section style={{padding:"0 24px 80px",maxWidth:"1100px",margin:"0 auto"}}>
+          <NowPage/>
+        </section>
+
+        {/* ── ABOUT ── */}
+        <section id="about" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">About</div>
+          <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"56px",alignItems:"start"}}>
+            <div>
+              <h2 style={{fontSize:"clamp(26px,4vw,38px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"20px",lineHeight:1.15}}>I build things<br/>that actually ship.</h2>
+              <div style={{display:"flex",flexDirection:"column",gap:"12px",marginBottom:"28px"}}>
+                {[
+                  "1+ year at AqueraLabs building production microservices on Node.js + AWS Lambda.",
+                  "Shipped GetQuest solo — a live GDPR SaaS. Published DeepLock on the Chrome Web Store.",
+                  "Now targeting AI-first startups where reliability and shipping speed both matter.",
+                ].map((line,i)=>(
+                  <div key={i} style={{display:"flex",gap:"12px",alignItems:"flex-start"}}>
+                    <span style={{color:C.accentBorder,flexShrink:0,marginTop:"4px",fontSize:"16px"}}>—</span>
+                    <p style={{fontSize:"15px",color:C.textMuted,lineHeight:1.65}}>{line}</p>
+                  </div>
+                ))}
               </div>
-              <Users className="text-teal-400" size={40} />
+              <div style={{display:"flex",gap:"10px",flexWrap:"wrap"}}>
+                <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="btn-outline" style={{fontSize:"13px",padding:"8px 16px"}}>LinkedIn ↗</a>
+                <a href={LINKS.topmate} target="_blank" rel="noreferrer" className="btn-outline" style={{fontSize:"13px",padding:"8px 16px"}}>Book 1:1 ↗</a>
+                <a href={LINKS.hashnode} target="_blank" rel="noreferrer" className="btn-outline" style={{fontSize:"13px",padding:"8px 16px"}}>Articles ↗</a>
+              </div>
             </div>
-
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-bold text-lg mb-2 text-red-400">
-                  THE PROBLEM:
-                </h4>
-                <p className="opacity-80">
-                  People struggle with habit consistency. Traditional habit
-                  trackers require app downloads, logins, manual entry - too
-                  much friction.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-lg mb-2 text-green-400">
-                  THE SOLUTION:
-                </h4>
-                <p className="opacity-80">
-                  Built automated habit tracking via Telegram bot integration,
-                  eliminating all friction.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-lg mb-2">Key Features:</h4>
-                <ul className="space-y-2 ml-4">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="text-teal-400 mt-1" size={20} />
-                    Telegram Bot Integration - Track via simple messages
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="text-teal-400 mt-1" size={20} />
-                    GitHub Cron Jobs - Automated daily reminders
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="text-teal-400 mt-1" size={20} />
-                    Kanban Board - Visual progress tracking
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="text-teal-400 mt-1" size={20} />
-                    Real-time Analytics - Streak tracking
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="text-teal-400 mt-1" size={20} />
-                    Zero-friction UX - No app downloads needed
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-lg mb-2">Tech Stack:</h4>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {[
-                    "Node.js",
-                    "Express.js",
-                    "PostgreSQL",
-                    "Telegram Bot API",
-                    "GitHub Actions",
-                    "Webhooks",
-                    "Vercel",
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-teal-500/10 text-teal-400 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-teal-500/10 to-purple-500/10 p-6 rounded-lg border border-teal-500/30">
-                <h4 className="font-bold text-lg mb-4 text-teal-400">
-                  THE IMPACT:
-                </h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">10+</div>
-                    <div className="text-sm opacity-80">Active Daily Users</div>
+            <div style={{display:"flex",flexDirection:"column",gap:"22px"}}>
+              {[
+                {year:"2022",    title:"Started from zero",       desc:"HTML, CSS, JS. First CRUD app. Figured out I loved the backend side.",             dot:"#d6d3d1"},
+                {year:"2023",    title:"Got serious",             desc:"Deep Node.js, PostgreSQL, Git. Web dev internship, first production deploy.",       dot:"#d6d3d1"},
+                {year:"Feb 2025",title:"AqueraLabs",              desc:"Backend SWE — microservices, AWS Lambda, CI/CD. Special Appreciation Award.",       dot:"#2563eb",bold:true},
+                {year:"2025",    title:"Shipping solo",           desc:"GetQuest (live SaaS) · DeepLock (Chrome Extension) · DevInsights AI · LLM integrations.", dot:"#16a34a",bold:true},
+                {year:"Now",     title:"Seeking next challenge",  desc:"SDE-2 at AI-first startups. Immediate joiner, 1 week notice.",                     dot:"#16a34a",pulse:true,bold:true},
+              ].map(item=>(
+                <div key={item.year} style={{display:"flex",gap:"14px"}}>
+                  <div style={{paddingTop:"5px"}}>
+                    <div style={{width:8,height:8,borderRadius:"50%",background:item.dot,...(item.pulse?{animation:"pulse 2s infinite"}:{})}}/>
                   </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">500+</div>
-                    <div className="text-sm opacity-80">Habits Tracked</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">85%</div>
-                    <div className="text-sm opacity-80">User Retention</div>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-3 gap-4 mt-4">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">100+</div>
-                    <div className="text-sm opacity-80">Daily Reminders</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">
-                      &lt;200ms
+                  <div>
+                    <div style={{display:"flex",gap:"8px",alignItems:"baseline",marginBottom:"3px"}}>
+                      <span style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:item.pulse?"#16a34a":C.textFaint}}>{item.year}</span>
+                      <span style={{fontSize:"14px",fontWeight:item.bold?500:400,color:item.bold?C.text:C.textMuted}}>{item.title}</span>
                     </div>
-                    <div className="text-sm opacity-80">API Response</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-teal-400">99%+</div>
-                    <div className="text-sm opacity-80">Uptime (3 mo)</div>
+                    <p style={{fontSize:"13px",color:C.textFaint,lineHeight:1.6}}>{item.desc}</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex gap-4">
-                <a
-                  href="https://habit-frontend-psi.vercel.app/"
-                  target="_blank"
-                  className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-all"
-                >
-                  Live Demo
-                </a>
-                <a
-                  href="https://github.com/sangamesh-Lingshetty"
-                  target="_blank"
-                  className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all`}
-                >
-                  View Code
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Dev Insight Project */}
-          <div
-            className={`${baseStyles.card} p-8 rounded-xl border ${baseStyles.border} mb-8`}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">DEV INSIGHT</h3>
-                <p className="text-lg opacity-80">
-                  Enterprise Developer Analytics
-                </p>
-                <span className="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-400 rounded-full text-sm mt-2">
-                  40% Complete - In Progress
-                </span>
-              </div>
-              <TrendingUp className="text-teal-400" size={32} />
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-bold mb-2">The Problem:</h4>
-                <p className="opacity-80 text-sm">
-                  Engineering teams lack visibility into development patterns,
-                  bottlenecks, and productivity metrics across repositories.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold mb-2">The Solution:</h4>
-                <p className="opacity-80 text-sm">
-                  Building comprehensive developer analytics platform that
-                  integrates with GitHub for actionable insights.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold mb-2">Key Features (In Progress):</h4>
-                <ul className="space-y-1 ml-4 text-sm">
-                  <li>• GitHub Integration - Automatic data collection</li>
-                  <li>• Commit Analytics - Track patterns and productivity</li>
-                  <li>• Code Quality Metrics - Analyze complexity</li>
-                  <li>• Team Insights - Collaboration patterns</li>
-                  <li>• Smart Alerts - Detect anomalies</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold mb-2">Tech Stack:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "Node.js",
-                    "Express",
-                    "GraphQL",
-                    "PostgreSQL",
-                    "Redis",
-                    "React",
-                    "GitHub API",
-                    "Docker",
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-purple-500/10 text-purple-400 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex gap-4 mt-4">
-                <a
-                  href="https://github.com/sangamesh-Lingshetty"
-                  target="_blank"
-                  className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all text-sm`}
-                >
-                  GitHub Repo
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Other Projects Grid */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* RBAC */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-            >
-              <h3 className="text-xl font-bold mb-3">
-                RBAC (Role-Based Access Control)
-              </h3>
-              <p className="opacity-80 text-sm mb-4">
-                Admin panel with JWT authentication. Admins perform CRUD
-                operations on roles, manage users and permissions. Fully
-                responsive design.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["React.js", "JWT", "MockApi", "Tailwind CSS"].map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <a
-                href="https://frontend-assignment-vrv.onrender.com/"
-                target="_blank"
-                className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-              >
-                View Project <ArrowRight size={16} />
-              </a>
-            </div>
-
-            {/* Abhi Book Karo */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-            >
-              <h3 className="text-xl font-bold mb-3">Abhi Book Karo</h3>
-              <p className="opacity-80 text-sm mb-4">
-                Home rental platform like Airbnb. Users find affordable homes,
-                book properties, negotiate with owners. Payment via Razorpay,
-                notifications via WebSocket.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["MERN Stack", "WebSocket", "Razorpay", "Firebase"].map(
-                  (tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 bg-purple-500/10 text-purple-400 rounded-full text-xs"
-                    >
-                      {tech}
-                    </span>
-                  )
-                )}
-              </div>
-              <a
-                href="https://github.com/sangamesh-Lingshetty"
-                target="_blank"
-                className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-              >
-                View Project <ArrowRight size={16} />
-              </a>
-            </div>
-
-            {/* Movie Recommendation */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-            >
-              <h3 className="text-xl font-bold mb-3">
-                Movie Recommendation System using GAN
-              </h3>
-              <p className="opacity-80 text-sm mb-4">
-                ML-based movie recommendation system utilizing GAN model for
-                personalized suggestions based on user preferences.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["Python", "GAN", "Machine Learning", "Jupyter"].map(
-                  (tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 bg-orange-500/10 text-orange-400 rounded-full text-xs"
-                    >
-                      {tech}
-                    </span>
-                  )
-                )}
-              </div>
-              <a
-                href="https://github.com/sangamesh-Lingshetty"
-                target="_blank"
-                className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-              >
-                View Project <ArrowRight size={16} />
-              </a>
-            </div>
-
-            {/* E-Waste Management */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-            >
-              <h3 className="text-xl font-bold mb-3">
-                E-Waste Management System
-              </h3>
-              <p className="opacity-80 text-sm mb-4">
-                Platform for users to report and drop electronic waste items.
-                BBMP collects waste after receiving details from users.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {["HTML", "CSS", "PHP", "Google API"].map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-1 bg-green-500/10 text-green-400 rounded-full text-xs"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <a
-                href="https://github.com/sangamesh-Lingshetty"
-                target="_blank"
-                className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-              >
-                View Project <ArrowRight size={16} />
-              </a>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section id="skills" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">Technical Skills</h2>
-
-          <div className="space-y-8">
-            {/* Backend & APIs */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border}`}
-            >
-              <h3 className="text-xl font-bold mb-6 text-teal-400">
-                Backend & APIs
-              </h3>
-              <div className="space-y-4">
+        {/* ── WORK EXPERIENCE ── */}
+        <section id="work" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Experience</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"36px"}}>Where I've worked</h2>
+          <div className="card" style={{borderColor:"#bbf7d0"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"20px"}}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"4px"}}>
+                  <span style={{fontSize:"18px",fontWeight:600,color:C.text}}>AqueraLabs Pvt. Ltd.</span>
+                  <span className="tag green" style={{fontSize:"10px"}}>Current</span>
+                </div>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"12px",color:C.accent}}>Backend Software Engineer</div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:C.textFaint}}>Feb 2025 – Present</div>
+                <div style={{fontSize:"12px",color:C.textFaint}}>Bengaluru, India</div>
+              </div>
+            </div>
+            <div style={{marginBottom:"22px"}}>
+              <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:C.textFaint,marginBottom:"14px",letterSpacing:"0.08em"}}>IMPACT</div>
+              <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
                 {[
-                  {
-                    name: "Node.js",
-                    level: 85,
-                    desc: "Production at Aquera + 5 projects",
-                  },
-                  {
-                    name: "Express.js",
-                    level: 85,
-                    desc: "All backend projects",
-                  },
-                  { name: "Python", level: 60, desc: "Automation scripts" },
-                  { name: "REST APIs", level: 90, desc: "Built 20+ endpoints" },
-                ].map((skill) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-sm opacity-60">{skill.level}%</span>
+                  {label:"API latency reduced",      before:100,after:55,color:"#16a34a",desc:"45% faster responses"},
+                  {label:"DB load reduced (Redis)",  before:100,after:40,color:"#2563eb",desc:"60% less queries"},
+                  {label:"Deploy time",              before:120,after:15,color:"#7c3aed",desc:"2hrs → 15min (CI/CD)"},
+                  {label:"Incident response faster", before:100,after:30,color:"#ea580c",desc:"70% with AI log alerts"},
+                ].map(m=>(
+                  <div key={m.label}>
+                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:"5px"}}>
+                      <span style={{fontSize:"12px",color:C.textMuted}}>{m.label}</span>
+                      <span style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:m.color}}>{m.desc}</span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
-                      <div
-                        className="bg-teal-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${skill.level}%` }}
-                      />
+                    <div style={{display:"flex",gap:"3px",height:"5px"}}>
+                      <div style={{flex:m.after,background:m.color,borderRadius:"3px"}}/>
+                      <div style={{flex:m.before-m.after,background:"#f5f5f4",borderRadius:"3px"}}/>
                     </div>
-                    <p className="text-xs opacity-60">{skill.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Databases & Caching */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border}`}
-            >
-              <h3 className="text-xl font-bold mb-6 text-teal-400">
-                Databases & Caching
-              </h3>
-              <div className="space-y-4">
-                {[
-                  { name: "PostgreSQL", level: 80, desc: "Primary database" },
-                  { name: "MongoDB", level: 70, desc: "NoSQL projects" },
-                  { name: "Redis", level: 60, desc: "Caching layer" },
-                ].map((skill) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-sm opacity-60">{skill.level}%</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
-                      <div
-                        className="bg-purple-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${skill.level}%` }}
-                      />
-                    </div>
-                    <p className="text-xs opacity-60">{skill.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Cloud & DevOps */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border}`}
-            >
-              <h3 className="text-xl font-bold mb-6 text-teal-400">
-                Cloud & DevOps
-              </h3>
-              <div className="space-y-4">
-                {[
-                  { name: "AWS", level: 70, desc: "EC2, S3, Lambda" },
-                  { name: "Docker", level: 65, desc: "Containerization" },
-                  {
-                    name: "Git/GitHub",
-                    level: 95,
-                    desc: "Version control + CI/CD",
-                  },
-                  { name: "Vercel", level: 80, desc: "Deployment" },
-                ].map((skill) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-sm opacity-60">{skill.level}%</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${skill.level}%` }}
-                      />
-                    </div>
-                    <p className="text-xs opacity-60">{skill.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Currently Learning */}
-            <div
-              className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} border-yellow-500/30`}
-            >
-              <h3 className="text-xl font-bold mb-4 text-yellow-400 flex items-center gap-2">
-                <Rocket size={24} />
-                Currently Learning
-              </h3>
-              <div className="grid md:grid-cols-2 gap-3">
-                {[
-                  "Microservices Architecture",
-                  "Kubernetes & Container Orchestration",
-                  "GraphQL APIs",
-                  "Event-Driven Architecture (Kafka, RabbitMQ)",
-                  "Advanced System Design Patterns",
-                  "Distributed Systems",
-                ].map((skill) => (
-                  <div key={skill} className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full" />
-                    <span className="text-sm">{skill}</span>
-                  </div>
-                ))}
-              </div>
+            <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:"7px",marginBottom:"20px"}}>
+              {[
+                "Built and maintained REST APIs and backend services in production — core product + customer-facing features",
+                "Designed MySQL schemas and AWS infra (Lambda, EC2, S3, IAM) for a multi-tenant SaaS platform",
+                "Built internal monitoring tool with Slack/email alerts + AI-based log summarisation — 70% faster incident response",
+                "Received Special Appreciation Award for technical contributions and innovation",
+              ].map((item,i)=>(
+                <li key={i} style={{display:"flex",gap:"10px",fontSize:"13px",color:C.textMuted,lineHeight:1.6}}>
+                  <span style={{color:C.accentBorder,flexShrink:0}}>—</span>{item}
+                </li>
+              ))}
+            </ul>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+              {["Node.js","TypeScript","AWS Lambda","EC2","S3","MySQL","Redis","Docker","GitHub Actions","OAuth 2.0","RBAC"].map(t=>(
+                <span key={t} className="tag">{t}</span>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* My Journey Section */}
-        <section id="journey" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">My Journey</h2>
+        {/* ── PROJECTS ── */}
+        <section id="projects" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Projects</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"8px"}}>Things I've shipped</h2>
+          <p style={{color:C.textFaint,fontSize:"13px",marginBottom:"36px",fontFamily:"'DM Mono',monospace"}}>Production products, not demos.</p>
 
-          <div
-            className={`${baseStyles.card} p-8 rounded-xl border ${baseStyles.border}`}
-          >
-            <h3 className="text-2xl font-bold text-teal-400 mb-6">
-              From Curiosity to Production Code
-            </h3>
-
-            <div className="space-y-8">
-              <p className="text-lg opacity-90">
-                Started coding with simple scripts and curiosity about how web
-                applications work. Today, I'm building systems that serve
-                thousands of users.
-              </p>
-
-              <div className="space-y-6">
-                <div className="border-l-4 border-teal-500 pl-6">
-                  <h4 className="font-bold text-lg mb-2">
-                    2022-2023: The Foundation
-                  </h4>
-                  <ul className="space-y-1 opacity-80 text-sm">
-                    <li>• JavaScript, HTML, CSS fundamentals</li>
-                    <li>• Built first CRUD application</li>
-                    <li>• Learned Git and GitHub basics</li>
-                  </ul>
+          <div className="project-card" style={{borderColor:"#bbf7d0",marginBottom:"18px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"16px"}}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"5px"}}>
+                  <span style={{fontSize:"20px",fontWeight:600,color:C.text}}>GetQuest</span>
+                  <span className="tag green" style={{fontSize:"10px"}}>Live · Production</span>
                 </div>
-
-                <div className="border-l-4 border-teal-500 pl-6">
-                  <h4 className="font-bold text-lg mb-2">
-                    2024: The Breakthrough
-                  </h4>
-                  <ul className="space-y-1 opacity-80 text-sm">
-                    <li>• Dove deep into backend development</li>
-                    <li>• Mastered Node.js, Express, PostgreSQL</li>
-                    <li>• Got first job at Aquera</li>
-                    <li>• Deployed first production feature</li>
-                  </ul>
-                </div>
-
-                <div className="border-l-4 border-teal-500 pl-6">
-                  <h4 className="font-bold text-lg mb-2">
-                    2024-2025: Building & Growing
-                  </h4>
-                  <ul className="space-y-1 opacity-80 text-sm">
-                    <li>• Built Habit Tracker with 10 real users</li>
-                    <li>• Started Dev Insight enterprise project</li>
-                    <li>• Solved 500+ DSA problems</li>
-                    <li>• Active open source contributor</li>
-                  </ul>
-                </div>
-
-                <div className="border-l-4 border-yellow-500 pl-6">
-                  <h4 className="font-bold text-lg mb-2 text-yellow-400">
-                    2025: What's Next
-                  </h4>
-                  <ul className="space-y-1 opacity-80 text-sm">
-                    <li>• Exploring microservices architecture</li>
-                    <li>• Learning system design at scale</li>
-                    <li>• Building in public</li>
-                    <li>• Seeking next challenge</li>
-                  </ul>
-                </div>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:C.accent}}>GDPR-Compliant Vendor Questionnaire Automation SaaS</div>
               </div>
-
-              <div className="bg-gradient-to-r from-teal-500/10 to-purple-500/10 p-6 rounded-lg border border-teal-500/30 mt-8">
-                <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
-                  <Target size={24} className="text-teal-400" />
-                  What Drives Me
-                </h4>
-                <p className="opacity-90 mb-4">
-                  I don't just write code. I build products that people actually
-                  use and love. That's why my Habit Tracker has 10 real users -
-                  not imaginary ones.
-                </p>
-                <p className="opacity-90 mb-4">
-                  Every project I build solves a real problem. Every line of
-                  code I write, I ask: "Will this create value?"
-                </p>
-                <blockquote className="border-l-4 border-teal-500 pl-4 italic text-teal-400">
-                  "Code is cheap. Impact is expensive."
-                </blockquote>
-                <div className="mt-4 space-y-2">
-                  <p className="font-medium">I focus on:</p>
-                  <ul className="space-y-1 ml-4 text-sm">
-                    <li>• Solving real problems, not building for portfolio</li>
-                    <li>• Writing maintainable code, not clever code</li>
-                    <li>• Shipping features, not perfect features</li>
-                    <li>• Learning by building, not just tutorials</li>
-                  </ul>
+              <a href={LINKS.getquest} target="_blank" rel="noreferrer" className="btn-primary" style={{fontSize:"12px",padding:"8px 16px"}}>getquest.cloud ↗</a>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px",marginBottom:"16px"}}>
+              {[
+                {v:"2wk→30min",l:"Turnaround",   c:"#16a34a",bg:"#f0fdf4",b:"#bbf7d0"},
+                {v:"95%+",     l:"Fill accuracy",c:"#2563eb",bg:"#eff6ff",b:"#bfdbfe"},
+                {v:"SOC2+GDPR",l:"Compliance",   c:"#7c3aed",bg:"#f5f3ff",b:"#ddd6fe"},
+              ].map(m=>(
+                <div key={m.l} style={{background:m.bg,border:`1px solid ${m.b}`,borderRadius:"8px",padding:"12px",textAlign:"center"}}>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:"14px",fontWeight:600,color:m.c,marginBottom:"3px"}}>{m.v}</div>
+                  <div style={{fontSize:"10px",color:C.textFaint}}>{m.l}</div>
                 </div>
-              </div>
+              ))}
+            </div>
+            <p style={{fontSize:"13px",color:C.textMuted,lineHeight:1.7,marginBottom:"14px"}}>
+              GDPR-compliant SaaS automating vendor security questionnaires. AI-driven analysis auto-fills 50–200 question forms from SOC2/GDPR policies. Secure multi-tenant backend, full audit trails, JWT auth.
+            </p>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+              {["TypeScript","Next.js","Supabase","Vercel","LLM APIs","JWT","Multi-tenant","GDPR"].map(t=><span key={t} className="tag">{t}</span>)}
             </div>
           </div>
-        </section>
 
-        {/* Certifications */}
-        <section id="certifications" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">Certifications</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="project-card" style={{borderColor:"#ddd6fe",marginBottom:"18px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:"12px",marginBottom:"14px"}}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"5px"}}>
+                  <span style={{fontSize:"20px",fontWeight:600,color:C.text}}>DeepLock</span>
+                  <span className="tag purple" style={{fontSize:"10px"}}>Chrome Extension · Live</span>
+                  <span className="tag amber" style={{fontSize:"10px"}}>Mobile App WIP</span>
+                </div>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:"#7c3aed"}}>Published on Chrome Web Store · Mobile coming Q2 2025</div>
+              </div>
+              <a href={LINKS.deeplock} target="_blank" rel="noreferrer" className="btn-outline" style={{fontSize:"12px",padding:"8px 16px"}}>Web Store ↗</a>
+            </div>
+            <p style={{fontSize:"13px",color:C.textMuted,lineHeight:1.7,marginBottom:"14px"}}>
+              Built and published on the official Chrome Web Store. Currently porting to mobile (React Native) — targeting App Store launch Q2 2025.
+            </p>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+              {["Chrome Extension","JavaScript","React Native","Web Store"].map(t=><span key={t} className="tag">{t}</span>)}
+            </div>
+          </div>
+
+          <div className="project-card" style={{marginBottom:"18px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:"12px",marginBottom:"14px"}}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"5px"}}>
+                  <span style={{fontSize:"18px",fontWeight:600,color:C.text}}>DevInsights AI</span>
+                  <span className="tag blue" style={{fontSize:"10px"}}>Active Dev</span>
+                </div>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:"#2563eb"}}>Multi-Tenant GitHub Analytics SaaS</div>
+              </div>
+              <a href={LINKS.devinsights} target="_blank" rel="noreferrer" className="btn-outline" style={{fontSize:"12px",padding:"8px 14px"}}>GitHub ↗</a>
+            </div>
+            <p style={{fontSize:"13px",color:C.textMuted,lineHeight:1.7,marginBottom:"14px"}}>
+              Multi-tenant SaaS analysing GitHub activity. Processes 10K+ events/day, 90% API call reduction via intelligent caching. LLM integration for burnout risk detection and code quality insights.
+            </p>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+              {["Node.js","AWS Lambda","S3","GitHub API","LLM APIs","RBAC","Serverless"].map(t=><span key={t} className="tag">{t}</span>)}
+            </div>
+          </div>
+
+          <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"18px"}}>
             {[
-              {
-                title: "Full Stack Development",
-                issuer: "Udemy",
-                date: "July 2024",
-                link: "/starbugs.pdf",
-              },
-              {
-                title: "Problem Solving",
-                issuer: "GeeksforGeeks",
-                date: "June 2024",
-                link: "/coding.pdf",
-              },
-              {
-                title: "Amazon Web Services",
-                issuer: "AWS Academy",
-                date: "May 2023",
-                link: "/AWS..pdf",
-              },
-              {
-                title: "Web Development",
-                issuer: "Code Clause",
-                date: "Sep 2023",
-                link: "/code clause.pdf",
-              },
-              {
-                title: "Web Stack Academy",
-                issuer: "Full Stack Development",
-                date: "Dec 2023",
-                link: "/masai.pdf",
-              },
-              {
-                title: "Computer Vision",
-                issuer: "Great Learning",
-                date: "Oct 2024",
-                link: "/great_learning.PNG",
-              },
-            ].map((cert) => (
-              <div
-                key={cert.title}
-                className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-              >
-                <Award className="text-teal-400 mb-3" size={32} />
-                <h3 className="text-lg font-bold mb-2">{cert.title}</h3>
-                <p className="text-sm opacity-80 mb-1">{cert.issuer}</p>
-                <p className="text-xs opacity-60 mb-4">{cert.date}</p>
-                <a
-                  href={cert.link}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-                >
-                  View Certificate <ExternalLink size={14} />
-                </a>
+              {name:"My Habit",sub:"Habit Tracking SaaS",desc:"Telegram Bot integration, AWS serverless backend, DynamoDB, 80%+ test coverage.",tags:["Node.js","AWS Lambda","DynamoDB","Telegram API"],link:LINKS.habitdemo,linkLabel:"Live Demo ↗",badgeClass:"green"},
+              {name:"RBAC Admin Panel",sub:"Role-Based Access Control",desc:"JWT-authenticated admin panel. Full CRUD on roles, users, permissions.",tags:["React.js","JWT","Tailwind CSS"],link:LINKS.rbac,linkLabel:"View ↗",badgeClass:"green"},
+            ].map(p=>(
+              <div key={p.name} className="project-card">
+                <div style={{fontSize:"15px",fontWeight:600,color:C.text,marginBottom:"3px"}}>{p.name}</div>
+                <div style={{fontSize:"11px",color:C.textFaint,fontFamily:"'DM Mono',monospace",marginBottom:"10px"}}>{p.sub}</div>
+                <p style={{fontSize:"13px",color:C.textMuted,lineHeight:1.6,marginBottom:"12px"}}>{p.desc}</p>
+                <div style={{display:"flex",flexWrap:"wrap",gap:"4px",marginBottom:"12px"}}>
+                  {p.tags.map(t=><span key={t} className="tag" style={{fontSize:"10px"}}>{t}</span>)}
+                </div>
+                <a href={p.link} target="_blank" rel="noreferrer" style={{fontSize:"12px",color:C.accent}}>{p.linkLabel}</a>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Articles Section */}
-        <section id="articles" data-scroll className="py-20">
-          <h2 className="text-3xl font-bold mb-12">Latest Articles</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Creating an Email OTP System with React.js",
-                date: "Jan 2024",
-                readTime: "7 min read",
-                description:
-                  "A step-by-step guide to implementing a secure and efficient email OTP system using React.js.",
-                tags: ["React", "Authentication", "Security"],
-              },
-              {
-                title: "Leveraging Firebase Real-Time Database",
-                date: "Dec 2023",
-                readTime: "6 min read",
-                description:
-                  "Learn how to use Firebase Real-Time Database for building dynamic and responsive web applications.",
-                tags: ["Firebase", "Real-Time", "Database"],
-              },
-              {
-                title: "Connecting to MongoDB: A Beginner's Guide",
-                date: "Nov 2023",
-                readTime: "5 min read",
-                description:
-                  "A simple walkthrough on setting up your first database connection with MongoDB and understanding its core concepts.",
-                tags: ["MongoDB", "Databases", "Backend"],
-              },
-            ].map((article) => (
-              <div
-                key={article.title}
-                className={`${baseStyles.card} p-6 rounded-xl border ${baseStyles.border} hover:scale-105 transition-all duration-300`}
-              >
-                <div className="flex items-center gap-2 text-sm opacity-60 mb-3">
-                  <FileText size={16} />
-                  <span>{article.date}</span>
-                  <span>•</span>
-                  <span>{article.readTime}</span>
+        {/* ── FREELANCE ── */}
+        <section id="freelance" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Freelance</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"8px"}}>Client work</h2>
+          <p style={{color:C.textFaint,fontSize:"13px",marginBottom:"36px",fontFamily:"'DM Mono',monospace"}}>Open to contracts · 3+ months · Backend · SaaS · APIs</p>
+          <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"20px",marginBottom:"36px"}}>
+            <div className="card">
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"14px"}}>
+                <div>
+                  <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
+                    <span style={{fontSize:"16px",fontWeight:600,color:C.text}}>3D Shape Art</span>
+                    <span className="tag green" style={{fontSize:"10px"}}>Delivered</span>
+                  </div>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:C.textFaint}}>Web Platform · Full-Stack</div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{article.title}</h3>
-                <p className="text-sm opacity-80 mb-4">{article.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {article.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-teal-500/10 text-teal-400 rounded-full text-xs"
-                    >
-                      {tag}
-                    </span>
+                <a href={LINKS.shapeart} target="_blank" rel="noreferrer" style={{fontSize:"12px",color:C.accent}}>3dshapeart.com ↗</a>
+              </div>
+              <p style={{fontSize:"13px",color:C.textMuted,lineHeight:1.7,marginBottom:"14px"}}>Built the web platform for 3DShapeArt. Clean, performant, delivered on time with zero revision loops.</p>
+              <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                {["Web Development","Full-Stack","Performance"].map(t=><span key={t} className="tag" style={{fontSize:"10px"}}>{t}</span>)}
+              </div>
+            </div>
+            <div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:"12px",padding:"24px",display:"flex",flexDirection:"column",justifyContent:"space-between"}}>
+              <div>
+                <div style={{fontSize:"11px",fontFamily:"'DM Mono',monospace",color:"#15803d",marginBottom:"10px",letterSpacing:"0.08em"}}>AVAILABLE FOR CONTRACTS</div>
+                <h3 style={{fontSize:"16px",fontWeight:600,color:C.text,marginBottom:"12px",lineHeight:1.35}}>Need a backend engineer who ships?</h3>
+                <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:"7px",marginBottom:"20px"}}>
+                  {["REST API design & build","AWS serverless architecture","SaaS backend from scratch","LLM / AI integrations"].map(s=>(
+                    <li key={s} style={{display:"flex",gap:"8px",fontSize:"13px",color:C.textMuted}}>
+                      <span style={{color:"#16a34a",flexShrink:0}}>✓</span>{s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{display:"flex",gap:"10px",flexWrap:"wrap"}}>
+                <a href={LINKS.topmate} target="_blank" rel="noreferrer" className="btn-primary" style={{fontSize:"13px",padding:"10px 18px"}}>Book a free call ↗</a>
+                <a href={LINKS.email} className="btn-outline" style={{fontSize:"13px",padding:"10px 18px"}}>Email me</a>
+              </div>
+            </div>
+          </div>
+          <div className="section-label" style={{marginBottom:"20px"}}>What clients say</div>
+          <Testimonials/>
+        </section>
+
+        {/* ── SKILLS ── */}
+        <section id="skills" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Skills</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"36px"}}>Technical stack</h2>
+          <div className="three-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"18px"}}>
+            {[
+              {category:"Backend & Runtime",color:"#16a34a",bg:"#f0fdf4",border:"#bbf7d0",skills:[
+                {name:"Node.js",pct:90},{name:"TypeScript",pct:80},{name:"Express.js",pct:88},{name:"REST APIs",pct:92},{name:"Microservices",pct:75},
+              ]},
+              {category:"Cloud & DevOps",color:"#2563eb",bg:"#eff6ff",border:"#bfdbfe",skills:[
+                {name:"AWS Lambda",pct:82},{name:"EC2 / S3 / IAM",pct:75},{name:"Docker",pct:70},{name:"Terraform",pct:62},{name:"GitHub Actions",pct:85},
+              ]},
+              {category:"Databases & AI",color:"#7c3aed",bg:"#f5f3ff",border:"#ddd6fe",skills:[
+                {name:"MySQL",pct:82},{name:"PostgreSQL",pct:78},{name:"MongoDB",pct:70},{name:"Redis",pct:72},{name:"LLM APIs / GenAI",pct:65},
+              ]},
+            ].map(group=>(
+              <div key={group.category} style={{background:group.bg,border:`1px solid ${group.border}`,borderRadius:"12px",padding:"22px"}}>
+                <div style={{fontSize:"12px",fontWeight:500,color:group.color,marginBottom:"18px",fontFamily:"'DM Mono',monospace"}}>{group.category}</div>
+                <div style={{display:"flex",flexDirection:"column",gap:"13px"}}>
+                  {group.skills.map(s=>(
+                    <div key={s.name}>
+                      <div style={{display:"flex",justifyContent:"space-between",marginBottom:"5px"}}>
+                        <span style={{fontSize:"13px",color:C.textMuted}}>{s.name}</span>
+                        <span style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:C.textFaint}}>{s.pct}%</span>
+                      </div>
+                      <div className="skill-bar"><div className="skill-fill" style={{width:`${s.pct}%`,background:group.color}}/></div>
+                    </div>
                   ))}
                 </div>
-                <a
-                  href="https://hashnode.com/@SangameshLingshetty"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 text-sm text-teal-400 hover:underline"
-                >
-                  Read More <ArrowRight size={16} />
-                </a>
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:"18px",background:"#fffbeb",border:"1px solid #fde68a",borderRadius:"12px",padding:"20px"}}>
+            <div style={{fontSize:"12px",fontFamily:"'DM Mono',monospace",color:"#b45309",marginBottom:"12px"}}>CURRENTLY LEARNING</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
+              {["Kubernetes","GraphQL","Kafka / RabbitMQ","Advanced System Design","Distributed Systems","RAG Pipelines"].map(s=>(
+                <span key={s} className="tag amber">{s}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{marginTop:"18px",display:"flex",flexWrap:"wrap",gap:"10px"}}>
+            {[
+              {name:"Full Stack Development",issuer:"Udemy · July 2024"},
+              {name:"Problem Solving",       issuer:"GeeksforGeeks · June 2024"},
+              {name:"Web Development",       issuer:"Code Clause · Sep 2023"},
+              {name:"Computer Vision",       issuer:"Great Learning · Oct 2024"},
+            ].map(c=>(
+              <div key={c.name} style={{background:C.surface,border:`1px solid ${C.border}`,borderRadius:"8px",padding:"10px 14px"}}>
+                <div style={{fontSize:"13px",color:C.text,fontWeight:500}}>{c.name}</div>
+                <div style={{fontSize:"10px",color:C.textFaint,marginTop:"2px",fontFamily:"'DM Mono',monospace"}}>{c.issuer}</div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section id="cta" data-scroll className="py-20">
-          <div
-            className={`${baseStyles.card} p-8 md:p-12 rounded-xl border-2 border-teal-500 text-center`}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Let's Build Something Together
-            </h2>
+        {/* ── THINKING SECTION ─────────────────────────────────────────────────
+             This is the most differentiating section. Most devs skip all of this.
+             Recruiters screenshot this for hiring managers. CTOs read the tech decisions.
+        */}
+        <section id="thinking" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Thinking</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"8px"}}>How I think & work</h2>
+          <p style={{color:C.textFaint,fontSize:"13px",marginBottom:"36px",fontFamily:"'DM Mono',monospace"}}>The stuff that doesn't show on a resume.</p>
+          <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"20px",marginBottom:"20px"}}>
+            <AskMeAbout/>
+            <HowIWork/>
+          </div>
+          <TechDecisions/>
+        </section>
 
-            <div className="max-w-3xl mx-auto space-y-8">
-              <div>
-                <h3 className="text-xl font-bold text-teal-400 mb-4 flex items-center justify-center gap-2">
-                  <Target size={24} />
-                  What I'm Looking For
-                </h3>
-                <p className="text-lg opacity-90 mb-4">
-                  Backend Engineer or Full-Stack Engineer role (SDE-1/2) at
-                  product-based companies where I can:
-                </p>
-                <div className="grid md:grid-cols-2 gap-4 text-left">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    <span>Work on systems serving millions of users</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    <span>Learn from experienced engineers</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    <span>Build features with measurable impact</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle
-                      className="text-teal-400 mt-1 flex-shrink-0"
-                      size={20}
-                    />
-                    <span>Grow technically and professionally</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                <div
-                  className={`${baseStyles.card} p-4 rounded-lg border ${baseStyles.border}`}
-                >
-                  <Briefcase className="text-teal-400 mx-auto mb-2" size={32} />
-                  <h4 className="font-bold mb-1">Role Preference</h4>
-                  <p className="text-sm opacity-80">
-                    Backend-heavy or Full-Stack
-                  </p>
-                  <p className="text-xs opacity-60 mt-1">
-                    Startup or mid-size companies
-                  </p>
-                </div>
-                <div
-                  className={`${baseStyles.card} p-4 rounded-lg border ${baseStyles.border}`}
-                >
-                  <Globe className="text-teal-400 mx-auto mb-2" size={32} />
-                  <h4 className="font-bold mb-1">Expected CTC</h4>
-                  <p className="text-sm opacity-80">---- LPA</p>
-                  <p className="text-xs opacity-60 mt-1">
-                    Negotiable based on role
-                  </p>
-                </div>
-                <div
-                  className={`${baseStyles.card} p-4 rounded-lg border ${baseStyles.border}`}
-                >
-                  <Rocket className="text-teal-400 mx-auto mb-2" size={32} />
-                  <h4 className="font-bold mb-1">Availability</h4>
-                  <p className="text-sm opacity-80">Immediate Joiner</p>
-                  <p className="text-xs opacity-60 mt-1">
-                    1-week notice period
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-6">
-                <h3 className="text-lg font-bold mb-4">Get In Touch</h3>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <a
-                    href="mailto:sangameshlingshetty@gmail.com"
-                    className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-all hover:scale-105 flex items-center gap-2"
-                  >
-                    <Mail size={20} />
-                    Email Me
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/sangamesh-lingshetty-5a6647279"
-                    target="_blank"
-                    className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all hover:scale-105 flex items-center gap-2`}
-                  >
-                    <Linkedin size={20} />
-                    LinkedIn
-                  </a>
-                  <a
-                    href="https://github.com/sangamesh-Lingshetty"
-                    target="_blank"
-                    className={`px-6 py-3 border ${baseStyles.border} rounded-lg ${baseStyles.hover} transition-all hover:scale-105 flex items-center gap-2`}
-                  >
-                    <Github size={20} />
-                    GitHub
-                  </a>
-                </div>
-              </div>
-
-              <div className="text-sm opacity-60">
-                <p className="mb-2">🤝 Open to:</p>
-                <p>
-                  Full-time roles • Contract/Freelance (3+ months) • Technical
-                  consulting • Collaboration on interesting problems
-                </p>
-              </div>
-            </div>
+        {/* ── WRITING ── */}
+        <section style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Writing</div>
+          <h2 style={{fontSize:"clamp(24px,4vw,36px)",fontWeight:600,letterSpacing:"-0.02em",marginBottom:"8px"}}>Articles</h2>
+          <p style={{color:C.textFaint,fontSize:"13px",marginBottom:"28px",fontFamily:"'DM Mono',monospace"}}>Things I've written while building.</p>
+          <div className="three-col" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"16px"}}>
+            {[
+              {title:"Creating an Email OTP System with React.js",    date:"Jan 2024",mins:7,tags:["React","Auth"]},
+              {title:"Leveraging Firebase Real-Time Database",         date:"Dec 2023",mins:6,tags:["Firebase","Real-Time"]},
+              {title:"Connecting to MongoDB: A Beginner's Guide",      date:"Nov 2023",mins:5,tags:["MongoDB","Backend"]},
+            ].map(a=>(
+              <a key={a.title} href={LINKS.hashnode} target="_blank" rel="noreferrer" className="card" style={{display:"block",transition:"box-shadow 0.2s,border-color 0.2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor="#d6d3d1";e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.05)";}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor="#e7e5e4";e.currentTarget.style.boxShadow="none";}}>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:C.textFaint,marginBottom:"10px"}}>{a.date} · {a.mins} min</div>
+                <h3 style={{fontSize:"14px",color:C.text,lineHeight:1.55,marginBottom:"12px",fontWeight:500}}>{a.title}</h3>
+                <div style={{display:"flex",gap:"6px"}}>{a.tags.map(t=><span key={t} className="tag" style={{fontSize:"10px"}}>{t}</span>)}</div>
+              </a>
+            ))}
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" data-scroll className="py-20">
-          <div
-            className={`max-w-2xl mx-auto ${baseStyles.card} rounded-xl border ${baseStyles.border} p-8`}
-          >
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-              <Heart className="text-red-500" />
-              Send Me a Message
-            </h2>
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Name</label>
-                  <input
-                    type="text"
-                    className={`w-full px-4 py-3 rounded-lg bg-transparent border ${baseStyles.border} focus:border-teal-500 transition-colors outline-none`}
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className={`w-full px-4 py-3 rounded-lg bg-transparent border ${baseStyles.border} focus:border-teal-500 transition-colors outline-none`}
-                    placeholder="your@email.com"
-                  />
-                </div>
+        {/* ── CONTACT ── */}
+        <section id="contact" style={{padding:"80px 24px",maxWidth:"1100px",margin:"0 auto",borderTop:`1px solid ${C.border}`}}>
+          <div className="section-label">Contact</div>
+          <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"48px",alignItems:"start"}}>
+            <div>
+              <h2 style={{fontSize:"clamp(28px,4vw,44px)",fontWeight:600,letterSpacing:"-0.02em",lineHeight:1.1,marginBottom:"16px"}}>Let's build<br/>something</h2>
+              <p style={{color:C.textMuted,lineHeight:1.8,marginBottom:"24px",fontSize:"15px"}}>
+                Looking for Backend / Full-Stack SDE-2 roles at AI-first startups. <strong style={{color:C.text}}>Immediate joiner.</strong> Also open to freelance contracts.
+              </p>
+              <div style={{display:"flex",flexDirection:"column",gap:"10px",marginBottom:"20px"}}>
+                {[
+                  {label:"Email",    value:"sangameshlingshetty@gmail.com", href:LINKS.email},
+                  {label:"LinkedIn", value:"sangamesh-lingshetty",          href:LINKS.linkedin},
+                  {label:"GitHub",   value:"sangamesh-Lingshetty",          href:LINKS.github},
+                  {label:"Topmate", value:"Book a 1:1 call",               href:LINKS.topmate},
+                ].map(l=>(
+                  <a key={l.label} href={l.href} target="_blank" rel="noreferrer" style={{display:"flex",gap:"12px",alignItems:"center",padding:"11px 16px",background:C.surface,border:`1px solid ${C.border}`,borderRadius:"8px",transition:"border-color 0.15s,box-shadow 0.15s"}}
+                    onMouseEnter={e=>{e.currentTarget.style.borderColor="#a8a29e";e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.05)";}}
+                    onMouseLeave={e=>{e.currentTarget.style.borderColor="#e7e5e4";e.currentTarget.style.boxShadow="none";}}>
+                    <span style={{fontFamily:"'DM Mono',monospace",fontSize:"10px",color:C.textFaint,minWidth:"56px"}}>{l.label}</span>
+                    <span style={{fontSize:"13px",color:C.textMuted}}>{l.value}</span>
+                    <span style={{marginLeft:"auto",color:C.textFaint,fontSize:"12px"}}>↗</span>
+                  </a>
+                ))}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Message
-                </label>
-                <textarea
-                  rows={6}
-                  className={`w-full px-4 py-3 rounded-lg bg-transparent border ${baseStyles.border} focus:border-teal-500 transition-colors outline-none resize-none`}
-                  placeholder="Your message..."
-                />
+            </div>
+            <div style={{background:C.surface,border:`1px solid ${C.border}`,borderRadius:"12px",padding:"28px"}}>
+              <h3 style={{fontSize:"15px",fontWeight:500,marginBottom:"5px"}}>What I'm looking for</h3>
+              <p style={{fontSize:"11px",color:C.textFaint,marginBottom:"20px",fontFamily:"'DM Mono',monospace"}}>SDE-2 · Backend / Full-Stack · AI startups</p>
+              <div style={{display:"flex",flexDirection:"column"}}>
+                {[
+                  ["Role",         "Backend or Full-Stack Engineer (SDE-2)"],
+                  ["Target",       "AI startups, product companies"],
+                  ["Availability", "Immediate joiner · 1 week notice"],
+                  ["Location",     "Bengaluru · Open to remote"],
+                  ["Open to",      "Full-time · 3+ month contracts"],
+                ].map(([k,v],i,arr)=>(
+                  <div key={k} style={{display:"flex",justifyContent:"space-between",gap:"16px",fontSize:"13px",padding:"12px 0",borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
+                    <span style={{color:C.textFaint,flexShrink:0}}>{k}</span>
+                    <span style={{color:C.textMuted,textAlign:"right"}}>{v}</span>
+                  </div>
+                ))}
               </div>
-              <button
-                onClick={() => alert("Thank you! I'll get back to you soon.")}
-                className="w-full px-6 py-3 rounded-lg bg-teal-500 hover:bg-teal-600 text-white transition-all hover:scale-105"
-              >
-                Send Message
-              </button>
+              <div style={{marginTop:"20px",paddingTop:"16px",borderTop:`1px solid ${C.border}`}}>
+                <a href={LINKS.topmate} target="_blank" rel="noreferrer" className="btn-primary" style={{display:"block",textAlign:"center",fontSize:"13px",padding:"11px 20px"}}>
+                  Book a free intro call on Topmate ↗
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="py-8 text-center border-t border-gray-800">
-          <p className="text-sm opacity-60">
-            © {new Date().getFullYear()} All Rights Reserved. Developed with{" "}
-            <Heart size={14} className="inline text-red-500" /> by SANGAMESH
-            LINGSHETTY
-          </p>
+        <footer style={{borderTop:`1px solid ${C.border}`,padding:"28px 24px",display:"flex",flexWrap:"wrap",justifyContent:"space-between",alignItems:"center",gap:"16px",maxWidth:"1100px",margin:"0 auto"}}>
+          <p style={{fontFamily:"'DM Mono',monospace",fontSize:"11px",color:C.textFaint}}>© 2025 Sangamesh Lingshetty</p>
+          <div style={{display:"flex",gap:"16px"}}>
+            {[{label:"GitHub",href:LINKS.github},{label:"LinkedIn",href:LINKS.linkedin},{label:"Twitter",href:LINKS.twitter},{label:"Topmate",href:LINKS.topmate}].map(l=>(
+              <a key={l.label} href={l.href} target="_blank" rel="noreferrer" style={{fontSize:"12px",color:C.textFaint,fontFamily:"'DM Mono',monospace",transition:"color 0.15s"}}
+                onMouseEnter={e=>e.currentTarget.style.color=C.text}
+                onMouseLeave={e=>e.currentTarget.style.color=C.textFaint}>{l.label}</a>
+            ))}
+          </div>
         </footer>
       </main>
+
+      {!botOpen&&(
+        <button onClick={()=>setBotOpen(true)} style={{position:"fixed",bottom:"1.5rem",right:"1.5rem",zIndex:9998,background:C.accent,color:"#fff",border:"none",borderRadius:"50%",width:"52px",height:"52px",fontSize:"20px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(22,163,74,0.35)"}}>💬</button>
+      )}
+      {botOpen&&<ChatBot onClose={()=>setBotOpen(false)}/>}
     </div>
   );
-};
-
-export default Port;
+}
